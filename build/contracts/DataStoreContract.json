@@ -1,0 +1,1018 @@
+{
+  "contractName": "DataStoreContract",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "storeOwners",
+      "outputs": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "storeCount",
+          "type": "uint256"
+        },
+        {
+          "name": "ownerAddress",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "stores",
+      "outputs": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "storeOwnerAddress",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608060405234801561001057600080fd5b50610426806100206000396000f3fe60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063057cc2a114610051578063e8a59cd814610155575b600080fd5b34801561005d57600080fd5b506100a06004803603602081101561007457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061023c565b60405180806020018481526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828103825285818151815260200191508051906020019080838360005b838110156101185780820151818401526020810190506100fd565b50505050905090810190601f1680156101455780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b34801561016157600080fd5b5061018e6004803603602081101561017857600080fd5b810190808035906020019092919050505061031e565b60405180806020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828103825284818151815260200191508051906020019080838360005b838110156102005780820151818401526020810190506101e5565b50505050905090810190601f16801561022d5780820380516001836020036101000a031916815260200191505b50935050505060405180910390f35b6001602052806000526040600020600091509050806000018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102e85780601f106102bd576101008083540402835291602001916102e8565b820191906000526020600020905b8154815290600101906020018083116102cb57829003601f168201915b5050505050908060010154908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905083565b6000602052806000526040600020600091509050806000018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103ca5780601f1061039f576101008083540402835291602001916103ca565b820191906000526020600020905b8154815290600101906020018083116103ad57829003601f168201915b5050505050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690508256fea165627a7a7230582053dfb9982e83cfd2612b57684b653dae1deb229436c25ca82f58a3eff94379150029",
+  "deployedBytecode": "0x60806040526004361061004c576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff168063057cc2a114610051578063e8a59cd814610155575b600080fd5b34801561005d57600080fd5b506100a06004803603602081101561007457600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff16906020019092919050505061023c565b60405180806020018481526020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828103825285818151815260200191508051906020019080838360005b838110156101185780820151818401526020810190506100fd565b50505050905090810190601f1680156101455780820380516001836020036101000a031916815260200191505b5094505050505060405180910390f35b34801561016157600080fd5b5061018e6004803603602081101561017857600080fd5b810190808035906020019092919050505061031e565b60405180806020018373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001828103825284818151815260200191508051906020019080838360005b838110156102005780820151818401526020810190506101e5565b50505050905090810190601f16801561022d5780820380516001836020036101000a031916815260200191505b50935050505060405180910390f35b6001602052806000526040600020600091509050806000018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156102e85780601f106102bd576101008083540402835291602001916102e8565b820191906000526020600020905b8154815290600101906020018083116102cb57829003601f168201915b5050505050908060010154908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905083565b6000602052806000526040600020600091509050806000018054600181600116156101000203166002900480601f0160208091040260200160405190810160405280929190818152602001828054600181600116156101000203166002900480156103ca5780601f1061039f576101008083540402835291602001916103ca565b820191906000526020600020905b8154815290600101906020018083116103ad57829003601f168201915b5050505050908060020160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1690508256fea165627a7a7230582053dfb9982e83cfd2612b57684b653dae1deb229436c25ca82f58a3eff94379150029",
+  "sourceMap": "24:515:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;24:515:1;;;;;;;",
+  "deployedSourceMap": "24:515:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;487:49;;8:9:-1;5:2;;;30:1;27;20:12;5:2;487:49:1;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;487:49:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;487:49:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;444:37;;8:9:-1;5:2;;;30:1;27;20:12;5:2;444:37:1;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;444:37:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;444:37:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;487:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;444:37::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity ^0.5.0;\ncontract DataStoreContract \n{\n    struct EStore  {\n        string name;\n        mapping(uint => Product) products;\n        address payable storeOwnerAddress;\n    }\n    struct Product{\n        string name;\n        uint unitPrice;\n        uint totalQuantity;\n    }\n    struct StoreOwner{\n        string name;\n        uint storeCount;\n        address payable ownerAddress;\n        mapping(uint => EStore) stores;\n    }\n    mapping(uint => EStore) public stores;\n    mapping(address => StoreOwner) public storeOwners;\n}",
+  "sourcePath": "/home/naresh/final_projects/final-project-naresh071872/contracts/DataStoreContract.sol",
+  "ast": {
+    "absolutePath": "/home/naresh/final_projects/final-project-naresh071872/contracts/DataStoreContract.sol",
+    "exportedSymbols": {
+      "DataStoreContract": [
+        93
+      ]
+    },
+    "id": 94,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 57,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:1"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 93,
+        "linearizedBaseContracts": [
+          93
+        ],
+        "name": "DataStoreContract",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "DataStoreContract.EStore",
+            "id": 66,
+            "members": [
+              {
+                "constant": false,
+                "id": 59,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 66,
+                "src": "83:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 58,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "83:6:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 63,
+                "name": "products",
+                "nodeType": "VariableDeclaration",
+                "scope": 66,
+                "src": "104:33:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Product_$73_storage_$",
+                  "typeString": "mapping(uint256 => struct DataStoreContract.Product)"
+                },
+                "typeName": {
+                  "id": 62,
+                  "keyType": {
+                    "id": 60,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "112:4:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "104:24:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Product_$73_storage_$",
+                    "typeString": "mapping(uint256 => struct DataStoreContract.Product)"
+                  },
+                  "valueType": {
+                    "contractScope": null,
+                    "id": 61,
+                    "name": "Product",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 73,
+                    "src": "120:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Product_$73_storage_ptr",
+                      "typeString": "struct DataStoreContract.Product"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 65,
+                "name": "storeOwnerAddress",
+                "nodeType": "VariableDeclaration",
+                "scope": 66,
+                "src": "147:33:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address_payable",
+                  "typeString": "address payable"
+                },
+                "typeName": {
+                  "id": 64,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "147:15:1",
+                  "stateMutability": "payable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "EStore",
+            "nodeType": "StructDefinition",
+            "scope": 93,
+            "src": "58:129:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "DataStoreContract.Product",
+            "id": 73,
+            "members": [
+              {
+                "constant": false,
+                "id": 68,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 73,
+                "src": "216:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 67,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "216:6:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 70,
+                "name": "unitPrice",
+                "nodeType": "VariableDeclaration",
+                "scope": 73,
+                "src": "237:14:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 69,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "237:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 72,
+                "name": "totalQuantity",
+                "nodeType": "VariableDeclaration",
+                "scope": 73,
+                "src": "261:18:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 71,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "261:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Product",
+            "nodeType": "StructDefinition",
+            "scope": 93,
+            "src": "192:94:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "DataStoreContract.StoreOwner",
+            "id": 84,
+            "members": [
+              {
+                "constant": false,
+                "id": 75,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "318:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 74,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "318:6:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 77,
+                "name": "storeCount",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "339:15:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 76,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "339:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 79,
+                "name": "ownerAddress",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "364:28:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address_payable",
+                  "typeString": "address payable"
+                },
+                "typeName": {
+                  "id": 78,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "364:15:1",
+                  "stateMutability": "payable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 83,
+                "name": "stores",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "402:30:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+                  "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+                },
+                "typeName": {
+                  "id": 82,
+                  "keyType": {
+                    "id": 80,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "410:4:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "402:23:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+                    "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+                  },
+                  "valueType": {
+                    "contractScope": null,
+                    "id": 81,
+                    "name": "EStore",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 66,
+                    "src": "418:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_EStore_$66_storage_ptr",
+                      "typeString": "struct DataStoreContract.EStore"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "StoreOwner",
+            "nodeType": "StructDefinition",
+            "scope": 93,
+            "src": "291:148:1",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 88,
+            "name": "stores",
+            "nodeType": "VariableDeclaration",
+            "scope": 93,
+            "src": "444:37:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+              "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+            },
+            "typeName": {
+              "id": 87,
+              "keyType": {
+                "id": 85,
+                "name": "uint",
+                "nodeType": "ElementaryTypeName",
+                "src": "452:4:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "444:23:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+                "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 86,
+                "name": "EStore",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 66,
+                "src": "460:6:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_EStore_$66_storage_ptr",
+                  "typeString": "struct DataStoreContract.EStore"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 92,
+            "name": "storeOwners",
+            "nodeType": "VariableDeclaration",
+            "scope": 93,
+            "src": "487:49:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StoreOwner_$84_storage_$",
+              "typeString": "mapping(address => struct DataStoreContract.StoreOwner)"
+            },
+            "typeName": {
+              "id": 91,
+              "keyType": {
+                "id": 89,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "495:7:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "487:30:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StoreOwner_$84_storage_$",
+                "typeString": "mapping(address => struct DataStoreContract.StoreOwner)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 90,
+                "name": "StoreOwner",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 84,
+                "src": "506:10:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_StoreOwner_$84_storage_ptr",
+                  "typeString": "struct DataStoreContract.StoreOwner"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 94,
+        "src": "24:515:1"
+      }
+    ],
+    "src": "0:539:1"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/naresh/final_projects/final-project-naresh071872/contracts/DataStoreContract.sol",
+    "exportedSymbols": {
+      "DataStoreContract": [
+        93
+      ]
+    },
+    "id": 94,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 57,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:1"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 93,
+        "linearizedBaseContracts": [
+          93
+        ],
+        "name": "DataStoreContract",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "DataStoreContract.EStore",
+            "id": 66,
+            "members": [
+              {
+                "constant": false,
+                "id": 59,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 66,
+                "src": "83:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 58,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "83:6:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 63,
+                "name": "products",
+                "nodeType": "VariableDeclaration",
+                "scope": 66,
+                "src": "104:33:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Product_$73_storage_$",
+                  "typeString": "mapping(uint256 => struct DataStoreContract.Product)"
+                },
+                "typeName": {
+                  "id": 62,
+                  "keyType": {
+                    "id": 60,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "112:4:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "104:24:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_Product_$73_storage_$",
+                    "typeString": "mapping(uint256 => struct DataStoreContract.Product)"
+                  },
+                  "valueType": {
+                    "contractScope": null,
+                    "id": 61,
+                    "name": "Product",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 73,
+                    "src": "120:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Product_$73_storage_ptr",
+                      "typeString": "struct DataStoreContract.Product"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 65,
+                "name": "storeOwnerAddress",
+                "nodeType": "VariableDeclaration",
+                "scope": 66,
+                "src": "147:33:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address_payable",
+                  "typeString": "address payable"
+                },
+                "typeName": {
+                  "id": 64,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "147:15:1",
+                  "stateMutability": "payable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "EStore",
+            "nodeType": "StructDefinition",
+            "scope": 93,
+            "src": "58:129:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "DataStoreContract.Product",
+            "id": 73,
+            "members": [
+              {
+                "constant": false,
+                "id": 68,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 73,
+                "src": "216:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 67,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "216:6:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 70,
+                "name": "unitPrice",
+                "nodeType": "VariableDeclaration",
+                "scope": 73,
+                "src": "237:14:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 69,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "237:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 72,
+                "name": "totalQuantity",
+                "nodeType": "VariableDeclaration",
+                "scope": 73,
+                "src": "261:18:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 71,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "261:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Product",
+            "nodeType": "StructDefinition",
+            "scope": 93,
+            "src": "192:94:1",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "DataStoreContract.StoreOwner",
+            "id": 84,
+            "members": [
+              {
+                "constant": false,
+                "id": 75,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "318:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 74,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "318:6:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 77,
+                "name": "storeCount",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "339:15:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 76,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "339:4:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 79,
+                "name": "ownerAddress",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "364:28:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address_payable",
+                  "typeString": "address payable"
+                },
+                "typeName": {
+                  "id": 78,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "364:15:1",
+                  "stateMutability": "payable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address_payable",
+                    "typeString": "address payable"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 83,
+                "name": "stores",
+                "nodeType": "VariableDeclaration",
+                "scope": 84,
+                "src": "402:30:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+                  "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+                },
+                "typeName": {
+                  "id": 82,
+                  "keyType": {
+                    "id": 80,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "410:4:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "402:23:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+                    "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+                  },
+                  "valueType": {
+                    "contractScope": null,
+                    "id": 81,
+                    "name": "EStore",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 66,
+                    "src": "418:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_EStore_$66_storage_ptr",
+                      "typeString": "struct DataStoreContract.EStore"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "StoreOwner",
+            "nodeType": "StructDefinition",
+            "scope": 93,
+            "src": "291:148:1",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 88,
+            "name": "stores",
+            "nodeType": "VariableDeclaration",
+            "scope": 93,
+            "src": "444:37:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+              "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+            },
+            "typeName": {
+              "id": 87,
+              "keyType": {
+                "id": 85,
+                "name": "uint",
+                "nodeType": "ElementaryTypeName",
+                "src": "452:4:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "444:23:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_EStore_$66_storage_$",
+                "typeString": "mapping(uint256 => struct DataStoreContract.EStore)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 86,
+                "name": "EStore",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 66,
+                "src": "460:6:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_EStore_$66_storage_ptr",
+                  "typeString": "struct DataStoreContract.EStore"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 92,
+            "name": "storeOwners",
+            "nodeType": "VariableDeclaration",
+            "scope": 93,
+            "src": "487:49:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StoreOwner_$84_storage_$",
+              "typeString": "mapping(address => struct DataStoreContract.StoreOwner)"
+            },
+            "typeName": {
+              "id": 91,
+              "keyType": {
+                "id": 89,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "495:7:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "487:30:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_StoreOwner_$84_storage_$",
+                "typeString": "mapping(address => struct DataStoreContract.StoreOwner)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 90,
+                "name": "StoreOwner",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 84,
+                "src": "506:10:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_StoreOwner_$84_storage_ptr",
+                  "typeString": "struct DataStoreContract.StoreOwner"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 94,
+        "src": "24:515:1"
+      }
+    ],
+    "src": "0:539:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.1",
+  "updatedAt": "2019-01-24T01:16:53.893Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
