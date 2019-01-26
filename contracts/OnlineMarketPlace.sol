@@ -1,137 +1,249 @@
-/*
-    This exercise has been updated to use Solidity version 0.5
-    Breaking changes from 0.4 to 0.5 can be found here: 
-    https://solidity.readthedocs.io/en/v0.5.0/050-breaking-changes.html
-*/
-
 pragma solidity ^0.5.0;
+import "./AccessRestriction.sol";
 
-contract OnlineMarketPlace {
-    
-     struct Store  {
-        string name;
-        mapping(uint => Product) products;
-        address payable storeOwnerAddress;
-    }
-    struct Product{
+/* @title OnlineMarketPlace
+* @author Naresh Saladi
+* @notice Final Project - Consensys Training
+*/
+contract OnlineMarketPlace is AccessRestriction {
+ 
+    bool public stopped = false;
+
+     mapping(address => bool) public adminAddressMap;  
+     mapping(address => bool) public storeOwnerAddressMap;  
+     struct Product{
         uint productId;
         string name;
         uint unitPrice;
         uint totalQuantity;
+        uint productSales;
     }
-    struct StoreOwner{
+     struct Store  {
         string name;
-        uint storeCount;
-        address payable ownerAddress;
-        mapping(uint => Store) stores;
+        uint productsCount;
+        uint storeSales;
+        address payable owner;
+        mapping(uint => Product) products;
     }
-    mapping(uint => Store) public stores;
     
-    mapping(address => StoreOwner) public storeOwners;
-    mapping (address => bool) public admins;
-    
-    constructor() public{
-      
-      
-    }
-    function addAdmin(address admin) public
-    {
-        admins[admin]=true;
-    }
-    //The web app reads the address and identifies that the user is an admin
-    //showing them admin only functions,
-    function identityAsAdmin() public view 
-    {
-        require(admins[msg.sender]==true,"Provided user is not administrator");
-    }
-    //An admin adds an address to the list of approved store owners
-    function addStoreOwner(address payable _owner) public 
-    {
-        storeOwners[_owner] = StoreOwner("",0,_owner);
-    }
+    mapping(uint => Store) stores;
+    uint storeCount;
    
-    /**An approved store owner logs into the app. 
-    The web app recognizes their address and identifies them as a store owner. 
-    They are shown the store owner functions.*/
-
-    function approveOwner() public view returns (bool)
+    
+     //Events
+     event LogAdminAdded(address _owner);
+     event LogAdminDeleted(address _owner);
+      event LogStoreOwnerAdded(address _owner);
+     event LogStoreOwnerDeleted(address _owner);
+     
+     event LogAddStore(uint _storeId,string _name);
+     event LogDeleteStore(uint _storeId);
+   
+     event LogProductAdded(uint _storeId,string _name,uint _unitPrice,uint _totalQuantity);
+     event LogProductRemoved(uint _storeId,uint _productId);
+     event LogUpdatePrice(uint _storeId,uint _productid,uint _unitPrice);
+     event LogWithdrawFunds(uint _storeId,uint _funds);
+     
+     event LogProductBought(uint _storeId,uint _productId,uint _quantity);
+     event LogInventoryAdjustment(uint _storeId,uint _productId,uint _quantity);
+     
+     /* @dev modifier checks owner is contract owner
+    * @param _owner address of next administrator
+    */
+    modifier restrictContractOwner() 
     {
-        return storeOwners[msg.sender].ownerAddress == msg.sender;
+       
+        require(owner == msg.sender,"Provided user is not contract owner");
+        _;
     }
-    //They can create a new storefront that will be displayed on the marketplace. 
-    function addStore(uint _storeId,string memory _name) public returns (string memory)
+    /* @dev adds given ethereum address as administrator
+    * @param _owner address of next administrator
+    */
+     function addAdmin(address _owner) public restrictContractOwner() returns (bool)
     {
-        storeOwners[msg.sender].storeCount++;
-        Store memory estore =Store(_name,msg.sender);
-        stores[_storeId] = estore;
-        return stores[_storeId].name;
+        adminAddressMap[_owner]=true;
+        emit LogAdminAdded(_owner);
+        return adminAddressMap[_owner];
+    }
+    /* @dev removes given ethereum address as administrator
+    * @param _owner address of next administrator
+    */
+     function deleteAdmin(address _owner) public restrictContractOwner() returns (bool)
+    {
+        delete adminAddressMap[_owner];
+        emit LogAdminDeleted(_owner);
+        return true;
+    }
+    /* @dev modifier checks owner is contract owner
+    * @param _owner address of next administrator
+    */
+    modifier restrictAdmin() 
+    {
+        require(adminAddressMap[msg.sender],"Provided user is not administrator");
+        _;
+    }
+     /* @dev adds given ethereum address as storeowner
+    * @param _owner address of storeowner
+    */
+     function addStoreOwner(address _owner) public restrictAdmin()
+    {
+        storeOwnerAddressMap[_owner]=true;
+        emit LogStoreOwnerAdded(_owner);
+    }
+    /* @dev removes given ethereum address as storeOwner
+    * @param _owner address of store owner
+    */
+     function deleteStoreOwner(address _owner) public restrictAdmin()
+    {
+        delete storeOwnerAddressMap[_owner];
+        emit LogStoreOwnerDeleted(_owner);
+    }
+    /* @dev modifier checks owner is storeowner
+    */
+    modifier restrictStoreOwner() 
+    {
+        require(storeOwnerAddressMap[msg.sender],"Provided user is not storeOwner");
+        _;
+    }
+    
+
+    modifier stopInEmergency { require(!stopped); _; }
+    modifier onlyInEmergency { require(stopped); _; }
+
+   
+    constructor() public{
+    }
+    
+    /* @dev create a new storefront that will be displayed on the marketplace
+     * @param name store name 
+     * @returns storeId id of store
+    */
+    
+    function addStore(string memory _name) public restrictStoreOwner() returns (uint)
+    {
+        storeCount++;
+        stores[storeCount] = Store(_name,0,0,msg.sender);
+        emit LogAddStore(storeCount,_name);
+        return storeCount;
        
     }
-    
-    //They can click on a storefront to manage it.
-    //They can add/remove products to the storefront  
-    function addProduct(uint _storeId,uint _productId,string memory _name,uint _unitPrice,uint _totalQuantity) public returns (string memory)
+    /* @dev delete a store that will be removed from the marketplace
+    * @param _storeId identifier of a store
+    */
+     function deleteStore(uint _storeId) public restrictStoreOwner() returns (uint)
     {
-        Product memory product =Product(_productId,_name,_unitPrice,_totalQuantity);
-        stores[_storeId].products[_productId] = product;
-        return _name;
+        storeCount--;
+        delete stores[_storeId];
+        emit LogDeleteStore(_storeId);
+        return _storeId;
+       
     }
-    function removeProduct(uint _storeId,uint _productId) public
+ 
+    /* @dev add a product to a specific store 
+    * @param _storeId identifier of a store
+      * @param _name name of product
+       * @param _unitPrice price of product
+        * @param _totalQuantity total inventory of product available
+         
+    */
+    function addProduct(uint _storeId,string memory _name,uint _unitPrice,uint _totalQuantity) public restrictStoreOwner() returns (uint)
     {
+        uint productId = stores[_storeId].productsCount++;
+        stores[_storeId].products[productId] = Product(productId,_name,_unitPrice,_totalQuantity,0);
+        emit LogProductAdded(_storeId,_name,_unitPrice,_totalQuantity);
+        return productId;
+    }
+      /* @dev remove a product from  a specific store 
+    * @param _storeId identifier of a store
+      * @param _productId identifier of a product
+    
+    */
+    function removeProduct(uint _storeId,uint _productId) public restrictStoreOwner() 
+    {
+        stores[_storeId].productsCount--;
         delete stores[_storeId].products[_productId];
-    }
-    //change any of the products’ prices.
-    function changePrice(uint _storeId,uint _productId,uint _unitPrice) public
-    {
-        stores[_storeId].products[_productId].unitPrice = _unitPrice;
-    }
-    //They can also withdraw any funds that the store has collected from sales.
-    function withdrawFunds(uint storeId,uint funds) public payable
-    {
-        stores[storeId].storeOwnerAddress.transfer(funds);
-    }
-   
-    
-//From the main page they can browse all of the storefronts that have been created in the marketplace. 
-    function browseStores() internal view  returns ( mapping(uint => Store) memory) 
-    {
-        return stores;
+        emit LogProductRemoved(_storeId,_productId);
     }
     
-/**    Clicking on a storefront will take them to a product page. 
-They can see a list of products offered by the store, including their price and quantity. 
-*/
-    function browseProducts(uint storeId) internal view returns ( mapping(uint => Product) memory)
+       /* @dev change any of the products’ prices.
+    * @param _storeId identifier of a store
+      * @param _productId identifier of a product
+    * @param _newUnitPrice new unit price of a product
+    */
+    function updatePrice(uint _storeId,uint _productId,uint _newUnitPrice) public restrictStoreOwner() 
     {
-        return stores[storeId].products;
+        stores[_storeId].products[_productId].unitPrice = _newUnitPrice;
+        emit LogUpdatePrice(_storeId,_productId,_newUnitPrice);
     }
-    
-    modifier paidEnough(uint storeId,uint productId,uint quantity) 
+  
+    /* @dev withdraw any funds that the store has collected from sales
+    * @param _storeId identifier of a store
+      * @param _funds  funds need to be withdraw from store balance
+    */
+    function withdrawFunds(uint _storeId,address payable _targetAddress, uint _funds) public payable onlyInEmergency() checkAvailFunds(_storeId,_funds)
+    {
+        _targetAddress.transfer(_funds);
+        stores[_storeId].storeSales -=_funds;
+        emit LogWithdrawFunds(_storeId,_funds);
+    }
+    /* @dev check availability funds
+    * @param _storeId identifier of a store
+      * @param _funds  funds need to be withdraw from store balance
+    */
+    modifier checkAvailFunds(uint _storeId,uint _funds) {
+        require(stores[_storeId].storeSales>=_funds,"Funds plan to withdraw is more than Store Balance");
+        _;
+    }
+
+
+       /* @dev check whether buyer has enough funds 
+    * @param _storeId identifier of a store
+      * @param _productId identifier of a product
+    * @param quantity product quantity
+    */
+    modifier buyerEnoughFunds(uint storeId,uint productId,uint quantity) 
     { 
         uint totalCost = stores[storeId].products[productId].unitPrice * quantity;
         require(msg.value >= totalCost,""); 
         _;
     }
+      /* @dev check product inventory .
+    * @param _storeId identifier of a store
+      * @param _productId identifier of a product
+    * @param quantity product quantity
+    */
     modifier checkStock(uint storeId,uint productId,uint quantity)
     {
         require (stores[storeId].products[productId].totalQuantity>=quantity,"Out-of-Stock"); 
         _;
     }
-/**Shoppers can purchase a product, which will debit their account and send it to the store. 
-The quantity of the item in the store’s inventory will be reduced by the appropriate amount.*/
-    function purchaseProduct(uint storeId,uint productId,uint quantity) public
-    checkStock(storeId,productId,quantity) paidEnough(storeId,productId,quantity)
+
+   /* @dev buy product .
+    * @param _storeId identifier of a store
+      * @param _productId identifier of a product
+    * @param quantity product quantity
+    */
+    function purchaseProduct(uint _storeId,uint _productId,uint _quantity) public
+    checkStock(_storeId,_productId,_quantity) buyerEnoughFunds(_storeId,_productId,_quantity) stopInEmergency()
      payable
     {
         
-        uint totalPrice = stores[storeId].products[productId].unitPrice * quantity;
-        stores[storeId].storeOwnerAddress.transfer(totalPrice);
-        adjustInventory(storeId,productId,quantity);
+        uint totalAmount = stores[_storeId].products[_productId].unitPrice * _quantity;
+        //stores[_storeId].owner.transfer(totalAmount);
+        adjustInventory(_storeId,_productId,_quantity);
+        stores[_storeId].products[_productId].productSales +=totalAmount;
+        stores[_storeId].storeSales +=totalAmount;
+        emit LogProductBought(_storeId,_productId,_quantity);
     }
-    
-    function adjustInventory(uint storeId,uint productId,uint quantity) private
+    /* @dev inventory will be reduced .
+    * @param _storeId identifier of a store
+      * @param _productId identifier of a product
+    * @param quantity product quantity
+    */
+    function adjustInventory(uint _storeId,uint _productId,uint _quantity) private
     {
-        stores[storeId].products[productId].totalQuantity = stores[storeId].products[productId].totalQuantity - quantity;
+        stores[_storeId].products[_productId].totalQuantity -= _quantity;
+        emit LogInventoryAdjustment(_storeId,_productId,_quantity);
 
     }
 }
