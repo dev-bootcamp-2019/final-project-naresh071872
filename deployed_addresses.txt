@@ -1,0 +1,3 @@
+test network - rinkeby
+contract address:    0xEFA513265612873675F9A739B79FeD8F2c24121E
+account:             0xCD66dF3a352ec9e7ceB6Cc9E7948c9cdAB8C65BB

@@ -28,7 +28,8 @@ contract OnlineMarketPlace is AccessRestriction {
     
     mapping(uint => Store) public stores;
     uint storeCount;
-   
+    uint adminCount;
+    uint storeOwnerCount;
     
      //Events
      event LogAdminAdded(address _owner);
@@ -173,7 +174,7 @@ contract OnlineMarketPlace is AccessRestriction {
     function updatePrice(uint _storeId,uint _productId,uint _newUnitPrice) public restrictStoreOwner() 
     {
         stores[_storeId].products[_productId].unitPrice = _newUnitPrice;
-        emit LogUpdatePrice(_storeId,_productId,_newUnitPrice);
+        emit LogUpdatePrice(_storeId,_productId,stores[_storeId].products[_productId].unitPrice);
     }
   
     /* @dev withdraw any funds that the store has collected from sales
@@ -254,4 +255,6 @@ contract OnlineMarketPlace is AccessRestriction {
     {
         return stores[storeId].productsCount;
     }
+    
+   
 }
