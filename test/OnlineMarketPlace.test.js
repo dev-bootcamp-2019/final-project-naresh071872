@@ -199,7 +199,7 @@ contract('OnlineMarketPlace', function (accounts) {
     const tx = await onlineMarketPlace.deleteStore(storeId,{from:accounts[2]})
 	
 	if (tx.logs[0].event) {
-		mystoreId = tx.logs[0].args._storeId.toString(20)
+		mystoreId = tx.logs[0].args._storeId.toString()
 		eventEmitted = true
 	}
 
