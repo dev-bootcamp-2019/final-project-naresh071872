@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 import "./AccessRestriction.sol";
-
+import "./SafeMath.sol";
 /* @title OnlineMarketPlace
 * @author Naresh Saladi
 * @notice Final Project - Consensys Training
@@ -181,10 +181,10 @@ contract OnlineMarketPlace is AccessRestriction {
     * @param _storeId identifier of a store
       * @param _funds  funds need to be withdraw from store balance
     */
-    function withdrawFunds(uint _storeId,address payable _targetAddress, uint _funds) public payable onlyInEmergency() checkAvailFunds(_storeId,_funds)
+    function withdrawFunds(uint _storeId,uint _funds) public payable onlyInEmergency() //checkAvailFunds(_storeId,_funds)
     {
-        _targetAddress.transfer(_funds);
-        stores[_storeId].storeSales -=_funds;
+        //msg.sender.transfer(_funds);
+        stores[_storeId].storeSales = SafeMath.sub(stores[_storeId].storeSales,_funds);
         emit LogWithdrawFunds(_storeId,_funds);
     }
     /* @dev check availability funds
@@ -205,7 +205,7 @@ contract OnlineMarketPlace is AccessRestriction {
     modifier buyerEnoughFunds(uint storeId,uint productId,uint quantity) 
     { 
         uint totalCost = stores[storeId].products[productId].unitPrice * quantity;
-        require(msg.value >= totalCost,""); 
+        require(msg.sender.balance >= totalCost,"Buyer doesn't have enought balance"); 
         _;
     }
       /* @dev check product inventory .
@@ -230,7 +230,7 @@ contract OnlineMarketPlace is AccessRestriction {
     {
         
         uint totalAmount = stores[_storeId].products[_productId].unitPrice * _quantity;
-        //stores[_storeId].owner.transfer(totalAmount);
+       // stores[_storeId].owner.transfer(totalAmount);
         adjustInventory(_storeId,_productId,_quantity);
         stores[_storeId].products[_productId].productSales +=totalAmount;
         stores[_storeId].storeSales +=totalAmount;
@@ -255,6 +255,8 @@ contract OnlineMarketPlace is AccessRestriction {
     {
         return stores[storeId].productsCount;
     }
-    
-   
+    function getProductPrice(uint storeId,uint productId)  public view returns (uint)
+{
+    return stores[storeId].products[productId].unitPrice;
+}   
 }
