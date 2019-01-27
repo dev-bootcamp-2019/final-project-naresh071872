@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 import "./AccessRestriction.sol";
-import "./SafeMath.sol";
+
 /* @title OnlineMarketPlace
 * @author Naresh Saladi
 * @notice Final Project - Consensys Training
@@ -22,11 +22,11 @@ contract OnlineMarketPlace is AccessRestriction {
         string name;
         uint productsCount;
         uint storeSales;
-        address payable storeOwnerAddress;
+        address payable owner;
         mapping(uint => Product) products;
     }
     
-    mapping(uint => Store) stores;
+    mapping(uint => Store) public stores;
     uint storeCount;
    
     
@@ -59,20 +59,18 @@ contract OnlineMarketPlace is AccessRestriction {
     /* @dev adds given ethereum address as administrator
     * @param _owner address of next administrator
     */
-     function addAdmin(address _owner) public restrictContractOwner() returns (bool)
+     function addAdmin(address _owner) public restrictContractOwner()
     {
         adminAddressMap[_owner]=true;
         emit LogAdminAdded(_owner);
-        return adminAddressMap[_owner];
     }
     /* @dev removes given ethereum address as administrator
     * @param _owner address of next administrator
     */
-     function deleteAdmin(address _owner) public restrictContractOwner() returns (bool)
+     function deleteAdmin(address _owner) public restrictContractOwner()
     {
         delete adminAddressMap[_owner];
         emit LogAdminDeleted(_owner);
-        return true;
     }
     /* @dev modifier checks owner is contract owner
     * @param _owner address of next administrator
@@ -121,7 +119,7 @@ contract OnlineMarketPlace is AccessRestriction {
     
     function addStore(string memory _name) public restrictStoreOwner() returns (uint)
     {
-        storeCount = SafeMath.add(storeCount,1);
+        storeCount++;
         stores[storeCount] = Store(_name,0,0,msg.sender);
         emit LogAddStore(storeCount,_name);
         return storeCount;
@@ -132,7 +130,7 @@ contract OnlineMarketPlace is AccessRestriction {
     */
      function deleteStore(uint _storeId) public restrictStoreOwner() returns (uint)
     {
-        storeCount= SafeMath.sub(storeCount,1);
+        storeCount--;
         delete stores[_storeId];
         emit LogDeleteStore(_storeId);
         return _storeId;
@@ -148,11 +146,12 @@ contract OnlineMarketPlace is AccessRestriction {
     */
     function addProduct(uint _storeId,string memory _name,uint _unitPrice,uint _totalQuantity) public restrictStoreOwner() returns (uint)
     {
-        stores[_storeId].productsCount= SafeMath.add(stores[_storeId].productsCount,1);
+        stores[_storeId].productsCount= stores[_storeId].productsCount+1;
         uint productId = stores[_storeId].productsCount;
-        stores[_storeId].products[productId] = Product(productId,_name,_unitPrice,_totalQuantity,0);
+        Product memory product = Product(productId,_name,_unitPrice,_totalQuantity,0);
+        stores[_storeId].products[productId] = product;
         emit LogProductAdded(_storeId,_name,_unitPrice,_totalQuantity);
-        return productId;
+        return  stores[_storeId].products[productId].totalQuantity;
     }
       /* @dev remove a product from  a specific store 
     * @param _storeId identifier of a store
@@ -161,7 +160,7 @@ contract OnlineMarketPlace is AccessRestriction {
     */
     function removeProduct(uint _storeId,uint _productId) public restrictStoreOwner() 
     {
-        stores[_storeId].productsCount= SafeMath.sub(stores[_storeId].productsCount,1);
+        stores[_storeId].productsCount--;
         delete stores[_storeId].products[_productId];
         emit LogProductRemoved(_storeId,_productId);
     }
@@ -230,7 +229,7 @@ contract OnlineMarketPlace is AccessRestriction {
     {
         
         uint totalAmount = stores[_storeId].products[_productId].unitPrice * _quantity;
-        stores[_storeId].storeOwnerAddress.transfer(totalAmount);
+        //stores[_storeId].owner.transfer(totalAmount);
         adjustInventory(_storeId,_productId,_quantity);
         stores[_storeId].products[_productId].productSales +=totalAmount;
         stores[_storeId].storeSales +=totalAmount;
@@ -246,5 +245,13 @@ contract OnlineMarketPlace is AccessRestriction {
         stores[_storeId].products[_productId].totalQuantity -= _quantity;
         emit LogInventoryAdjustment(_storeId,_productId,_quantity);
 
+    }
+    function getStoreCount() external view returns(uint)
+    {
+        return storeCount;
+    }
+    function getProductCount(uint storeId) external view returns(uint)
+    {
+        return stores[storeId].productsCount;
     }
 }
