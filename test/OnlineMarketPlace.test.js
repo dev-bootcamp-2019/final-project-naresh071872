@@ -84,7 +84,7 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
     const contractOwner = onlineMarketPlace.owner;
     var eventEmitted = false;
-    var store = "AMAZON";
+    const store = ethers.utils.formatBytes32String("AMAZON");
     var name;
 
     const tx = await onlineMarketPlace.addStore(store, { from: accounts[2] });
@@ -110,7 +110,8 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
 
     var eventEmitted = false;
-    var name = "SHAMPOO";
+    const name = ethers.utils.formatBytes32String("SHAMPOO");
+
     var storeId = 1;
     var productId = 1;
     var unitPrice = 12;

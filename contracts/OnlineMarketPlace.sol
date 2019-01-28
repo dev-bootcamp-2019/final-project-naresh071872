@@ -15,13 +15,13 @@ contract OnlineMarketPlace is AccessRestriction {
      mapping(address => bool) public storeOwnerAddressMap;  
      struct Product{
         uint productId;
-        string name;
+        bytes32 name;
         uint unitPrice;
         uint totalQuantity;
         uint productSales;
     }
      struct Store  {
-        string name;
+        bytes32 name;
         uint productsCount;
         uint storeSales;
         address payable owner;
@@ -40,10 +40,10 @@ contract OnlineMarketPlace is AccessRestriction {
       event LogStoreOwnerAdded(address _owner);
      event LogStoreOwnerDeleted(address _owner);
      
-     event LogAddStore(uint _storeId,string _name);
+     event LogAddStore(uint _storeId,bytes32 _name);
      event LogDeleteStore(uint _storeId);
    
-     event LogProductAdded(uint _storeId,string _name,uint _unitPrice,uint _totalQuantity);
+     event LogProductAdded(uint _storeId,bytes32 _name,uint _unitPrice,uint _totalQuantity);
      event LogProductRemoved(uint _storeId,uint _productId);
      event LogUpdatePrice(uint _storeId,uint _productid,uint _unitPrice);
      event LogWithdrawFunds(uint _storeId,uint _funds);
@@ -144,7 +144,7 @@ contract OnlineMarketPlace is AccessRestriction {
      * @returns storeId id of store
     */
     
-    function addStore(string memory _name) public restrictStoreOwner() returns (uint)
+    function addStore(bytes32 _name) public restrictStoreOwner() returns (uint)
     {
         storeCount++;
         stores[storeCount] = Store(_name,0,0,msg.sender);
@@ -171,7 +171,7 @@ contract OnlineMarketPlace is AccessRestriction {
         * @param _totalQuantity total inventory of product available
          
     */
-    function addProduct(uint _storeId,string memory _name,uint _unitPrice,uint _totalQuantity) public restrictStoreOwner() returns (uint)
+    function addProduct(uint _storeId,bytes32 _name,uint _unitPrice,uint _totalQuantity) public restrictStoreOwner() returns (uint)
     {
         stores[_storeId].productsCount= stores[_storeId].productsCount+1;
         uint productId = stores[_storeId].productsCount;
@@ -316,10 +316,10 @@ contract OnlineMarketPlace is AccessRestriction {
     function getStores(address storeOwner)
     public
     view
-    returns(uint[]  memory ,string[] memory, uint[] memory) {
+    returns(uint[]  memory ,bytes32[] memory, uint[] memory) {
         
         uint[] memory storeIds = new uint[](storeCount);
-        string[] memory names = new string[](storeCount);
+        bytes32[] memory names = new bytes32[](storeCount);
         uint[] memory storeSales = new uint[](storeCount);
        
         for(uint i = 0; i < storeCount; i++) {
@@ -335,10 +335,10 @@ contract OnlineMarketPlace is AccessRestriction {
     function getStores()
     public
     view
-    returns(uint[]  memory ,string[] memory, address[] memory) {
+    returns(uint[]  memory ,bytes32[] memory, address[] memory) {
         
         uint[] memory storeIds = new uint[](storeCount);
-        string[] memory names = new string[](storeCount);
+        bytes32[] memory names = new bytes32[](storeCount);
         address[] memory owners = new address[](storeCount);
        
        
@@ -357,12 +357,12 @@ contract OnlineMarketPlace is AccessRestriction {
     function getProductCatalog(uint _storeId)
     public
     view
-    returns(uint[] memory, string[] memory, uint[] memory, uint[] memory)
+    returns(uint[] memory, bytes32[] memory, uint[] memory, uint[] memory)
     {
         uint _productCount= stores[_storeId].productsCount;
         
         uint[] memory itemIds = new uint[](_productCount);
-        string[] memory itemNames = new string[](_productCount);
+        bytes32[] memory itemNames = new bytes32[](_productCount);
         uint[] memory itemQuantities = new uint[](_productCount);
         uint[] memory itemPrices = new uint[](_productCount);
         for(uint i = 0; i < _productCount; i++) {
