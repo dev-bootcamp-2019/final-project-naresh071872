@@ -146,7 +146,7 @@ contract OnlineMarketPlace is AccessRestriction {
     
     function addStore(bytes32 _name) public restrictStoreOwner() returns (uint)
     {
-        storeCount++;
+        storeCount =SafeMath.add(storeCount,1);
         stores[storeCount] = Store(_name,0,0,msg.sender);
         emit LogAddStore(storeCount,_name);
         return storeCount;
@@ -173,7 +173,7 @@ contract OnlineMarketPlace is AccessRestriction {
     */
     function addProduct(uint _storeId,bytes32 _name,uint _unitPrice,uint _totalQuantity) public restrictStoreOwner() returns (uint)
     {
-        stores[_storeId].productsCount= stores[_storeId].productsCount+1;
+        stores[_storeId].productsCount= SafeMath.add(stores[_storeId].productsCount,1);
         uint productId = stores[_storeId].productsCount;
         Product memory product = Product(productId,_name,_unitPrice,_totalQuantity,0);
         stores[_storeId].products[productId] = product;
@@ -259,8 +259,8 @@ contract OnlineMarketPlace is AccessRestriction {
         uint totalAmount = stores[_storeId].products[_productId].unitPrice * _quantity;
        
         adjustInventory(_storeId,_productId,_quantity);
-        stores[_storeId].products[_productId].productSales +=totalAmount;
-        stores[_storeId].storeSales +=totalAmount;
+        stores[_storeId].products[_productId].productSales =SafeMath.add(stores[_storeId].products[_productId].productSales,totalAmount);
+        stores[_storeId].storeSales = SafeMath.add(stores[_storeId].storeSales,totalAmount);
         emit LogProductBought(_storeId,_productId,_quantity);
     }
     /* @dev inventory will be reduced .
