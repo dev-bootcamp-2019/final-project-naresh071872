@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import Navigation from '../../components/navigation';
-import './admin.css';
+import React, { Component } from "react";
+import Navigation from "../../components/navigation";
+import "./admin.css";
 
 class AdminPage extends Component {
   constructor() {
     super();
     this.state = {
-      adminAddress: '',
-      storeOwnerAddress: '',
+      adminAddress: "",
+      storeOwnerAddress: "",
       administrators: null,
-      storeOwners: null,
+      storeOwners: null
     };
     this.addAdmin = this.addAdmin.bind(this);
     this.addStoreOwner = this.addStoreOwner.bind(this);
@@ -20,7 +20,7 @@ class AdminPage extends Component {
     const { contract } = this.props;
     const [administrators, storeOwners] = await Promise.all([
       contract.getAdministrators(),
-      contract.getStoreOwners(),
+      contract.getStoreOwners()
     ]);
     this.setState({ administrators, storeOwners });
   }
@@ -29,11 +29,11 @@ class AdminPage extends Component {
     this.refreshData();
   }
 
-  removeAdmin(address) {
+  deleteAdmin(address) {
     const { contract, onOwnershipChange } = this.props;
     return async () => {
       try {
-        await contract.removeAdmin(address);
+        await contract.deleteAdmin(address);
         onOwnershipChange();
         setTimeout(() => {
           this.refreshData();
@@ -44,11 +44,11 @@ class AdminPage extends Component {
     };
   }
 
-  removeStoreOwner(address) {
+  deleteStoreOwner(address) {
     const { contract, onOwnershipChange } = this.props;
     return async () => {
       try {
-        await contract.removeStoreOwner(address);
+        await contract.deleteStoreOwner(address);
         onOwnershipChange();
         setTimeout(() => {
           this.refreshData();
@@ -100,9 +100,9 @@ class AdminPage extends Component {
                 <span>{address}</span>
                 <button
                   onClick={
-                    type === 'administrators'
-                      ? this.removeAdmin(address)
-                      : this.removeStoreOwner(address)
+                    type === "administrators"
+                      ? this.deleteAdmin(address)
+                      : this.deleteStoreOwner(address)
                   }
                 >
                   Remove
@@ -117,7 +117,7 @@ class AdminPage extends Component {
 
   onAddressChange(type) {
     return e => {
-      if (type === 'administrators') {
+      if (type === "administrators") {
         this.setState({ adminAddress: e.target.value });
       } else {
         this.setState({ storeOwnerAddress: e.target.value });
@@ -133,11 +133,11 @@ class AdminPage extends Component {
           <input
             onChange={this.onAddressChange(type)}
             type="text"
-            placeholder={'0x012334....'}
+            placeholder={"0x012334...."}
           />
           <button
             onClick={
-              type === 'administrators' ? this.addAdmin : this.addStoreOwner
+              type === "administrators" ? this.addAdmin : this.addStoreOwner
             }
           >
             Add
@@ -148,7 +148,7 @@ class AdminPage extends Component {
   }
 
   renderSections() {
-    return ['administrators', 'storeOwners'].map(type => {
+    return ["administrators", "storeOwners"].map(type => {
       return (
         <div key={type} className="panelSection">
           <h2>{type}</h2>

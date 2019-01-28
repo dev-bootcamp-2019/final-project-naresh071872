@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
-import OnlineMarketPlace from './contracts/OnlineMarketPlace.json';
-import { Switch, Route, HashRouter, Redirect } from 'react-router-dom';
-import { ethers, Contract } from 'ethers';
-import MarketPlace from './pages/marketPlace';
-import AdminPage from './pages/adminPage';
-import StoreOwnerPage from './pages/storeOwnerPage';
-import StorePage from './pages/storePage';
-import './App.css';
+import React, { Component } from "react";
+import OnlineMarketPlace from "./contracts/OnlineMarketPlace.json";
+
+import { Switch, Route, HashRouter, Redirect } from "react-router-dom";
+import { ethers, Contract } from "ethers";
+import MarketPlace from "./pages/marketPlace";
+import AdminPage from "./pages/adminPage";
+import StoreOwnerPage from "./pages/storeOwnerPage";
+import StorePage from "./pages/storePage";
+import "./App.css";
 
 const SMART_CONTRACT_ADDR =
   process.env.REACT_APP_SMART_CONTRACT_ADDRESS ||
-  '0x8Ce9A771DFECC434b98d8159d5D51E2517cf80C5';
+  "0x2d7f77f68bBdCe90E2c31B323d81682690282270";
 
 class App extends Component {
   constructor() {
@@ -34,14 +35,14 @@ class App extends Component {
       );
       const accounts = await web3Provider.listAccounts();
       const [isAdmin, isStoreOwner] = await Promise.all([
-        contract.administratorsByAddress(accounts[0]),
-        contract.storeOwnersByAddress(accounts[0]),
+        contract.adminAddressMap(accounts[0]),
+        contract.storeOwnerAddressMap(accounts[0])
       ]);
       this.setState({
         contract,
         accounts,
         isAdmin,
-        isStoreOwner,
+        isStoreOwner
       });
     } catch (err) {
       console.log(err);
@@ -51,27 +52,27 @@ class App extends Component {
   async onOwnershipChange() {
     const { contract, accounts } = this.state;
     const [isAdmin, isStoreOwner] = await Promise.all([
-      contract.administratorsByAddress(accounts[0]),
-      contract.storeOwnersByAddress(accounts[0]),
+      contract.adminAddressMap(accounts[0]),
+      contract.storeOwnerAddressMap(accounts[0])
     ]);
     this.setState({
       isAdmin,
-      isStoreOwner,
+      isStoreOwner
     });
   }
 
   render() {
     const { accounts, contract, isAdmin, isStoreOwner } = this.state;
-   /* if (!accounts || !contract) {
+    if (!accounts || !contract) {
       return (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: "center" }}>
           Loading Web3, accounts, and contract...
         </div>
       );
-    }*/
+    }
     return (
       <div className="App">
-        <h1 style={{ margin: '40px 0 60px 0' }}>Online  Marketplace</h1>
+        <h1 style={{ margin: "40px 0 60px 0" }}>Online Marketplace</h1>
         <HashRouter>
           <Switch>
             <Route
@@ -89,7 +90,7 @@ class App extends Component {
                     onOwnershipChange={this.onOwnershipChange}
                   />
                 ) : (
-                  <Redirect to={{ pathname: '/' }} />
+                  <Redirect to={{ pathname: "/" }} />
                 )
               }
             />
@@ -99,7 +100,7 @@ class App extends Component {
                 isStoreOwner ? (
                   <StoreOwnerPage {...props} {...this.state} />
                 ) : (
-                  <Redirect to={{ pathname: '/' }} />
+                  <Redirect to={{ pathname: "/" }} />
                 )
               }
             />

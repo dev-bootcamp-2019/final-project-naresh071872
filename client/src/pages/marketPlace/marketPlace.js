@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import { ethers } from 'ethers';
-import { Link } from 'react-router-dom';
-import Navigation from '../../components/navigation';
+import React, { Component } from "react";
+import { ethers } from "ethers";
+import { Link } from "react-router-dom";
+import Navigation from "../../components/navigation";
 
-import './marketPlace.css';
+import "./marketPlace.css";
 
 class MarketPlace extends Component {
   constructor() {
     super();
     this.state = {
-      stores: null,
+      stores: null
     };
   }
 
   async componentDidMount() {
     const { contract, accounts } = this.props;
     try {
-      const [ids, names, owners] = await contract.getStorefronts();
+      const [ids, names, owners] = await contract.getStores();
       let stores = [];
       ids.forEach((id, i) => {
         const name = ethers.utils.parseBytes32String(names[i]);
@@ -30,11 +30,11 @@ class MarketPlace extends Component {
   renderContent() {
     const { stores } = this.state;
     if (!stores || stores.length === 0) {
-      return <div styles={{ marginTop: '20px' }}>No stores created yet.</div>;
+      return <div styles={{ marginTop: "20px" }}>No stores created yet.</div>;
     }
     return (
       <table
-        style={{ width: '80%', margin: '50px auto 0 auto' }}
+        style={{ width: "80%", margin: "50px auto 0 auto" }}
         className="storeTable"
       >
         <thead>
@@ -66,8 +66,8 @@ class MarketPlace extends Component {
     return (
       <div className="marketPlace">
         <Navigation isAdmin={isAdmin} isStoreOwner={isStoreOwner} />
-        <h1>Market place page</h1>
-        <div>Your address: {accounts[0]}</div>
+        <h1>Online Market Place page</h1>
+        <div>Your address: </div>
         {this.renderContent()}
       </div>
     );

@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { ethers } from 'ethers';
-import { Link } from 'react-router-dom';
-import Navigation from '../../components/navigation';
-import './storeOwner.css';
+import React, { Component } from "react";
+import { ethers } from "ethers";
+import { Link } from "react-router-dom";
+import Navigation from "../../components/navigation";
+import "./storeOwner.css";
 
 class StoreOwnerPage extends Component {
   constructor() {
     super();
     this.state = {
       stores: null,
-      storeName: '',
+      storeName: ""
     };
     this.onStoreNameChange = this.onStoreNameChange.bind(this);
     this.createStore = this.createStore.bind(this);
@@ -19,9 +19,7 @@ class StoreOwnerPage extends Component {
 
   async refreshData() {
     const { contract, accounts } = this.props;
-    const [ids, names, balances] = await contract.getOwnerStorefronts(
-      accounts[0]
-    );
+    const [ids, names, balances] = await contract.findStores(accounts[0]);
     let stores = [];
     ids.forEach((idHex, i) => {
       const id = idHex;
@@ -38,10 +36,9 @@ class StoreOwnerPage extends Component {
   async createStore() {
     const { storeName } = this.state;
     const { contract } = this.props;
-    if (!storeName || storeName === '') return;
+    if (!storeName || storeName === "") return;
     try {
-      const nameToBytes32 = ethers.utils.formatBytes32String(storeName);
-      await contract.createStore(nameToBytes32);
+      await contract.addStore(storeName);
       setTimeout(() => {
         this.refreshData();
       }, 5000);
@@ -58,7 +55,7 @@ class StoreOwnerPage extends Component {
     return async () => {
       const { contract } = this.props;
       try {
-        await contract.removeStore(storeId);
+        await contract.deleteStore(storeId);
         setTimeout(() => {
           this.refreshData();
         }, 5000);
@@ -72,8 +69,8 @@ class StoreOwnerPage extends Component {
     return async () => {
       const { contract } = this.props;
       try {
-        await contract.widthdrawStorefrontBalance(storeId, {
-          gasLimit: 150000,
+        await contract.withdrawFunds(storeId, {
+          gasLimit: 150000
         });
         setTimeout(() => {
           this.refreshData();
@@ -88,7 +85,7 @@ class StoreOwnerPage extends Component {
     const { stores } = this.state;
     if (!stores || stores.length === 0)
       return (
-        <div style={{ marginTop: '40px' }}>You don't have any stores yet.</div>
+        <div style={{ marginTop: "40px" }}>You don't have any stores yet.</div>
       );
     return (
       <div className="panelSection">

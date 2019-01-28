@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { ethers } from 'ethers';
-import Navigation from '../../components/navigation';
-import './store.css';
+import React, { Component } from "react";
+import { ethers } from "ethers";
+import Navigation from "../../components/navigation";
+import "./store.css";
 
 const GAZ_LIMIT = 200000;
 const GAZ_PRICE = 60000000000;
@@ -12,14 +12,14 @@ class StorePage extends Component {
     this.state = {
       store: null,
       inventory: null,
-      itemName: '',
-      itemPrice: '',
-      itemQuantity: '',
+      itemName: "",
+      itemPrice: "",
+      itemQuantity: "",
       addItemError: false,
       rowEdit: false,
-      priceEdit: '',
-      quantityEdit: '',
-      buyQuantity: 1,
+      priceEdit: "",
+      quantityEdit: "",
+      buyQuantity: 1
     };
     this.addItem = this.addItem.bind(this);
     this.refreshData = this.refreshData.bind(this);
@@ -40,27 +40,27 @@ class StorePage extends Component {
       const storeId = match.params.storeId;
       try {
         const [store, [ids, names, quantities, prices]] = await Promise.all([
-          contract.storefrontsById(storeId),
-          contract.getStorefrontInventory(storeId),
+          contract.stores(storeId),
+          contract.getProductCatalog(storeId)
         ]);
 
         let mappedInventory = [];
         ids.forEach((id, i) => {
           mappedInventory.push({
             id,
-            name: ethers.utils.parseBytes32String(names[i]),
+            name: names[i],
             quantity: Number(ethers.utils.formatEther(quantities[i])),
-            price: ethers.utils.formatEther(prices[i]),
+            price: ethers.utils.formatEther(prices[i])
           });
         });
         this.setState({
           store: {
             id: store.id,
-            name: ethers.utils.parseBytes32String(store.name),
+            name: store.name,
             owner: store.owner,
-            balance: store.balance.toString(),
+            balance: store.balance.toString()
           },
-          inventory: mappedInventory,
+          inventory: mappedInventory
         });
       } catch (e) {
         console.log(e);
@@ -87,14 +87,13 @@ class StorePage extends Component {
   async addItem() {
     const { contract } = this.props;
     const { itemName, itemPrice, itemQuantity, store } = this.state;
-    if (itemName === '' || itemPrice === '' || itemQuantity === '') {
+    if (itemName === "" || itemPrice === "" || itemQuantity === "") {
       this.setState({ addItemError: true });
     }
     try {
-      const itemNameBytes32 = ethers.utils.formatBytes32String(itemName);
-      await contract.addItemToInventory(
+      await contract.addProduct(
         store.id,
-        itemNameBytes32,
+        itemName,
         ethers.utils.parseEther(itemPrice),
         ethers.utils.parseEther(itemQuantity)
       );
@@ -126,7 +125,7 @@ class StorePage extends Component {
     return async () => {
       const { quantityEdit, store } = this.state;
       const { contract } = this.props;
-      if (!quantityEdit || quantityEdit === '') return;
+      if (!quantityEdit || quantityEdit === "") return;
       try {
         await contract.updateItemQuantity(
           itemId,
@@ -135,7 +134,7 @@ class StorePage extends Component {
         );
         setTimeout(() => {
           this.refreshData();
-          this.setState({ quantityEdit: '', rowEdit: false });
+          this.setState({ quantityEdit: "", rowEdit: false });
         }, 5000);
       } catch (e) {
         console.log(e);
@@ -147,16 +146,16 @@ class StorePage extends Component {
     return async () => {
       const { priceEdit, store } = this.state;
       const { contract } = this.props;
-      if (!priceEdit || priceEdit === '') return;
+      if (!priceEdit || priceEdit === "") return;
       try {
-        await contract.updateItemPrice(
+        await contract.updatePrice(
           itemId,
           store.id,
           ethers.utils.parseEther(priceEdit)
         );
         setTimeout(() => {
           this.refreshData();
-          this.setState({ priceEdit: '', rowEdit: false });
+          this.setState({ priceEdit: "", rowEdit: false });
         }, 5000);
       } catch (e) {
         console.log(e);
@@ -170,7 +169,7 @@ class StorePage extends Component {
       const { contract } = this.props;
       const { store } = this.state;
       try {
-        await contract.removeItemFromInventory(itemId, store.id);
+        await contract.removeProduct(itemId, store.id);
         setTimeout(this.refreshData, 5000);
       } catch (e) {
         console.log(e);
@@ -187,10 +186,10 @@ class StorePage extends Component {
         const price = buyQuantity * Number(item.price);
         const priceEther = ethers.utils.parseEther(price.toString());
         const quantity = ethers.utils.parseEther(buyQuantity.toString());
-        await contract.purchaseItem(store.id, item.id, quantity, {
+        await contract.purchaseProduct(store.id, item.id, quantity, {
           value: priceEther,
           gasLimit: GAZ_LIMIT,
-          gasPrice: GAZ_PRICE,
+          gasPrice: GAZ_PRICE
         });
         this.setState({ buyQuantity: 1 });
         setTimeout(this.refreshData, 5000);
@@ -242,7 +241,7 @@ class StorePage extends Component {
             ) : (
               <div>
                 <input
-                  style={{ marginRight: '10px' }}
+                  style={{ marginRight: "10px" }}
                   type="number"
                   placeholder="Please enter a quantity"
                   onChange={this.onQuantityChange}
@@ -260,7 +259,7 @@ class StorePage extends Component {
   renderItems() {
     const { inventory } = this.state;
     if (!inventory || inventory.length === 0) {
-      return <div style={{ margin: '20px 0' }}>No item for sale yet.</div>;
+      return <div style={{ margin: "20px 0" }}>No item for sale yet.</div>;
     }
     return (
       <div className="panelSection">
@@ -292,7 +291,7 @@ class StorePage extends Component {
             <label>Name</label>
             <input
               type="text"
-              onChange={this.onItemInputChange('itemName')}
+              onChange={this.onItemInputChange("itemName")}
               placeholder="Please enter a product name"
             />
           </div>
@@ -300,7 +299,7 @@ class StorePage extends Component {
             <label>Price</label>
             <input
               type="text"
-              onChange={this.onItemInputChange('itemPrice')}
+              onChange={this.onItemInputChange("itemPrice")}
               placeholder="Please enter a product price"
             />
           </div>
@@ -308,7 +307,7 @@ class StorePage extends Component {
             <label>Quantity</label>
             <input
               type="number"
-              onChange={this.onItemInputChange('itemQuantity')}
+              onChange={this.onItemInputChange("itemQuantity")}
               placeholder="Please enter a product quantity"
             />
           </div>
