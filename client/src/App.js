@@ -11,7 +11,7 @@ import "./App.css";
 
 const SMART_CONTRACT_ADDR =
   process.env.REACT_APP_SMART_CONTRACT_ADDRESS ||
-  "0x2d7f77f68bBdCe90E2c31B323d81682690282270";
+  "0xa39A9fA7e4624b60C4b11e7B83EE5851Cf497B3C";
 
 class App extends Component {
   constructor() {

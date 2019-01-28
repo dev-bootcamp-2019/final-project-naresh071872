@@ -1,3 +1,3 @@
-test network - rinkeby
-contract address:    0xEFA513265612873675F9A739B79FeD8F2c24121E
-account:             0xCD66dF3a352ec9e7ceB6Cc9E7948c9cdAB8C65BB
+Contract Addresses
+    Ropsten: 0xa39A9fA7e4624b60C4b11e7B83EE5851Cf497B3C
+    Rinkeby: 0xaD3591637553bFd0a93AB9D086c536A188e15Cb0
