@@ -84,21 +84,18 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
     const contractOwner = onlineMarketPlace.owner;
     var eventEmitted = false;
-    const store = ethers.utils.formatBytes32String("AMAZON");
-    var name;
+    const name = ethers.utils.formatBytes32String("AMAZON");
+    var nameValue;
 
-    const tx = await onlineMarketPlace.addStore(store, { from: accounts[2] });
+    const tx = await onlineMarketPlace.addStore(name, { from: accounts[2] });
 
     if (tx.logs[0].event) {
-      name = tx.logs[0].args._name.toString(20);
+      nameValue = tx.logs[0].args._name;
+      storeId = tx.logs[0].args._storeId;
       eventEmitted = true;
     }
-    let stores = [];
-    let length = Number(await onlineMarketPlace.getStoreCount());
-    for (let i = 0; i < length; i++)
-      stores.push(await onlineMarketPlace.stores.call(i + 1));
-
-    assert.equal(stores[0].name, store, "Passed Store should be added");
+    
+    assert.equal(nameValue, name, "Passed Store should be added");
     assert.equal(
       eventEmitted,
       true,
@@ -112,11 +109,10 @@ contract("OnlineMarketPlace", function(accounts) {
     var eventEmitted = false;
     const name = ethers.utils.formatBytes32String("SHAMPOO");
 
-    var storeId = 1;
-    var productId = 1;
     var unitPrice = 12;
     var quantity = 200;
-    var mystoreId;
+    var nameValue;
+    
     const tx = await onlineMarketPlace.addProduct(
       storeId,
       name,
@@ -126,13 +122,14 @@ contract("OnlineMarketPlace", function(accounts) {
     );
 
     if (tx.logs[0].event) {
-      mystoreId = tx.logs[0].args._storeId.toString(20);
+      nameValue = tx.logs[0].args._name;
+      productId = tx.logs[0].args._productId;
       eventEmitted = true;
     }
 
     assert.equal(
-      mystoreId,
-      storeId,
+      nameValue,
+      name,
       "Passed Product should be added to a specific store"
     );
     assert.equal(
@@ -146,8 +143,6 @@ contract("OnlineMarketPlace", function(accounts) {
 
     var eventEmitted = false;
 
-    var storeId = 1;
-    var productId = 1;
 
     var quantity = 1;
     var mystoreId;
@@ -175,12 +170,11 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
 
     var eventEmitted = false;
-    var storeId = 1;
-    var productId = 1;
+   
+   
     var updatedPrice = 22;
     var unitPrice;
     const tx = await onlineMarketPlace.updatePrice(
-      storeId,
       productId,
       updatedPrice,
       { from: accounts[2] }
@@ -190,7 +184,7 @@ contract("OnlineMarketPlace", function(accounts) {
       unitPrice = tx.logs[0].args._unitPrice.toString(20);
       eventEmitted = true;
     }
-    const result = await onlineMarketPlace.getProductPrice(storeId, productId);
+    const result = await onlineMarketPlace.getProductPrice( productId);
 
     assert.equal(result, updatedPrice, "Passed Unit Price should be updated");
     assert.equal(
@@ -204,7 +198,7 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
     const contractOwner = onlineMarketPlace.owner;
     var eventEmitted = true;
-    var storeId = 1;
+    var storeId = ethers.utils.formatBytes32String("1");
     var funds = 1;
 
     /*const tx = await onlineMarketPlace.withdrawFunds(storeId,funds,{from:accounts[2]})
@@ -227,8 +221,8 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
     const contractOwner = onlineMarketPlace.owner;
     var eventEmitted = false;
-    var storeId = 1;
-    var productId = 1;
+    var storeId = ethers.utils.formatBytes32String("1");
+    var productId = ethers.utils.formatBytes32String("1");
 
     const tx = await onlineMarketPlace.removeProduct(storeId, productId, {
       from: accounts[2]
@@ -250,7 +244,7 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
 
     var eventEmitted = false;
-    var storeId = 1;
+    var storeId = ethers.utils.formatBytes32String("1");
     var mystoreId;
 
     const tx = await onlineMarketPlace.deleteStore(storeId, {

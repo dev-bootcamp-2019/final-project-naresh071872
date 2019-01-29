@@ -41,26 +41,26 @@ class StorePage extends Component {
       try {
         const [store, [ids, names, quantities, prices]] = await Promise.all([
           contract.stores(storeId),
-          contract.getProductCatalog(storeId)
+          contract.productCatalog(storeId),
         ]);
 
         let mappedInventory = [];
         ids.forEach((id, i) => {
           mappedInventory.push({
             id,
-            name: names[i],
+            name: ethers.utils.parseBytes32String(names[i]),
             quantity: Number(ethers.utils.formatEther(quantities[i])),
-            price: ethers.utils.formatEther(prices[i])
+            price: ethers.utils.formatEther(prices[i]),
           });
         });
         this.setState({
           store: {
             id: store.id,
-            name: store.name,
+            name: ethers.utils.parseBytes32String(store.name),
             owner: store.owner,
-            balance: store.balance.toString()
+            balance: store.balance.toString(),
           },
-          inventory: mappedInventory
+          inventory: mappedInventory,
         });
       } catch (e) {
         console.log(e);
@@ -87,13 +87,14 @@ class StorePage extends Component {
   async addItem() {
     const { contract } = this.props;
     const { itemName, itemPrice, itemQuantity, store } = this.state;
-    if (itemName === "" || itemPrice === "" || itemQuantity === "") {
+    if (itemName === '' || itemPrice === '' || itemQuantity === '') {
       this.setState({ addItemError: true });
     }
     try {
+      const itemNameBytes32 = ethers.utils.formatBytes32String(itemName);
       await contract.addProduct(
         store.id,
-        itemName,
+        itemNameBytes32,
         ethers.utils.parseEther(itemPrice),
         ethers.utils.parseEther(itemQuantity)
       );

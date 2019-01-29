@@ -16,7 +16,7 @@ class MarketPlace extends Component {
   async componentDidMount() {
     const { contract, accounts } = this.props;
     try {
-      const [ids, names, owners] = await contract.getStores();
+      const [ids, names, owners] = await contract.findStores();
       let stores = [];
       ids.forEach((id, i) => {
         const name = ethers.utils.parseBytes32String(names[i]);
@@ -51,7 +51,7 @@ class MarketPlace extends Component {
                 <td>{store.name}</td>
                 <td>{store.owner}</td>
                 <td>
-                  <Link to={`store/${store.id}`}>Visit</Link>
+                  <Link to={`store/${store.storeId}`}>Visit</Link>
                 </td>
               </tr>
             );
@@ -67,7 +67,7 @@ class MarketPlace extends Component {
       <div className="marketPlace">
         <Navigation isAdmin={isAdmin} isStoreOwner={isStoreOwner} />
         <h1>Online Market Place page</h1>
-        <div>Your address: </div>
+        <div>Your address: {accounts[0]}</div>
         {this.renderContent()}
       </div>
     );

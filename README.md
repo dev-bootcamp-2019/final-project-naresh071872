@@ -24,8 +24,8 @@ Start the React app.
 
 Alternatively you can use test network deployed contracts addresses:
 
-    Ropsten: 0xa39A9fA7e4624b60C4b11e7B83EE5851Cf497B3C
-    Rinkeby: 0xaD3591637553bFd0a93AB9D086c536A188e15Cb0
+     Ropsten: 0xeB388843067dbDD6633935ab7B743Cd8E9e4621A
+    Rinkeby: 0xCaAdee09FeA0bBECB559475D067A23556C774CAA
 
 Project Description: Online Market Place Application was built as dapp with front-end on React JS.
 It includes following functionality as belows

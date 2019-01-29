@@ -19,7 +19,9 @@ class StoreOwnerPage extends Component {
 
   async refreshData() {
     const { contract, accounts } = this.props;
-    const [ids, names, balances] = await contract.findStores(accounts[0]);
+    const [ids, names, balances] = await contract.getOwnerStorefronts(
+      accounts[0]
+    );
     let stores = [];
     ids.forEach((idHex, i) => {
       const id = idHex;
@@ -36,9 +38,10 @@ class StoreOwnerPage extends Component {
   async createStore() {
     const { storeName } = this.state;
     const { contract } = this.props;
-    if (!storeName || storeName === "") return;
+    if (!storeName || storeName === '') return;
     try {
-      await contract.addStore(storeName);
+      const nameToBytes32 = ethers.utils.formatBytes32String(storeName);
+      await contract.addStore(nameToBytes32);
       setTimeout(() => {
         this.refreshData();
       }, 5000);
