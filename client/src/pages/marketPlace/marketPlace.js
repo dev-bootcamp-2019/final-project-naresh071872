@@ -18,9 +18,9 @@ class MarketPlace extends Component {
     try {
       const [ids, names, owners] = await contract.findStores();
       let stores = [];
-      ids.forEach((id, i) => {
+      ids.forEach((storeId, i) => {
         const name = ethers.utils.parseBytes32String(names[i]);
-        stores.push({ id, name, owner: owners[i] });
+        stores.push({ storeId, name, owner: owners[i] });
       });
       this.setState({ stores });
     } catch (e) {

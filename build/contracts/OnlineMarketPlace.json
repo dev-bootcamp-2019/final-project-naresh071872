@@ -39073,27 +39073,15 @@
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {
-    "3": {
-      "events": {},
-      "links": {},
-      "address": "0x8CEc59f15485E6d1CdB58b585aabE04041CF7491",
-      "transactionHash": "0xa1eb8d29820966e37ebd98e813a0517c75f5c39d1d30d588546ed24858e99ebe"
-    },
-    "4": {
-      "events": {},
-      "links": {},
-      "address": "0xCaAdee09FeA0bBECB559475D067A23556C774CAA",
-      "transactionHash": "0x15b9362e65f8140431af5d394bcc4bef9f1801144fcfbf7c51bc763ed3f64247"
-    },
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x402C1003A75cb75e638EBe00F8856f96640349C7",
-      "transactionHash": "0xf7030a6fad96df344d36bef68be34e02c4ec54337c88adc080ea3756cc51dc7d"
+      "address": "0x27ad2561f7F06aF55D43d312a818eA50b88BF2CE",
+      "transactionHash": "0xb45773ce990d91285201819660e8443882d307190045c8032ad7ee6cfba981cf"
     }
   },
   "schemaVersion": "3.0.1",
-  "updatedAt": "2019-01-29T05:27:46.580Z",
+  "updatedAt": "2019-01-29T07:06:02.318Z",
   "devdoc": {
     "methods": {
       "findStores()": {

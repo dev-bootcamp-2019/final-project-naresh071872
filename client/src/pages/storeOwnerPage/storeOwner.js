@@ -1,38 +1,47 @@
-import React, { Component } from "react";
-import { ethers } from "ethers";
-import { Link } from "react-router-dom";
-import Navigation from "../../components/navigation";
-import "./storeOwner.css";
+import React, { Component } from 'react';
+import { ethers } from 'ethers';
+import { Link } from 'react-router-dom';
+import Navigation from '../../components/navigation';
+import './storeOwner.css';
 
 class StoreOwnerPage extends Component {
   constructor() {
     super();
     this.state = {
       stores: null,
-      storeName: ""
+      storeName: '',
     };
     this.onStoreNameChange = this.onStoreNameChange.bind(this);
     this.createStore = this.createStore.bind(this);
     this.deleteStore = this.deleteStore.bind(this);
     this.withdrawBalance = this.withdrawBalance.bind(this);
+    this.refreshData = this.refreshData.bind(this);
+  }
+
+  async listenToContractEvents() {
+    const { contract } = this.props;
+    contract.on('LogStoreOwnerAdded', this.refreshData);
+    contract.on('LogStoreOwnerDeleted', this.refreshData);
+    contract.on('LogWithdrawFunds', this.refreshData);
   }
 
   async refreshData() {
     const { contract, accounts } = this.props;
-    const [ids, names, balances] = await contract.getOwnerStorefronts(
+    const [ids, names, balances] = await contract.findStoresByOwner(
       accounts[0]
     );
     let stores = [];
     ids.forEach((idHex, i) => {
-      const id = idHex;
+      const storeId = idHex;
       const name = ethers.utils.parseBytes32String(names[i]);
-      const balance = ethers.utils.formatEther(balances[i]);
-      stores.push({ id, name, balance });
+      const storeSales = ethers.utils.formatEther(balances[i]);
+      stores.push({ storeId, name, storeSales });
     });
     this.setState({ stores });
   }
   componentDidMount() {
     this.refreshData();
+    this.listenToContractEvents();
   }
 
   async createStore() {
@@ -42,9 +51,6 @@ class StoreOwnerPage extends Component {
     try {
       const nameToBytes32 = ethers.utils.formatBytes32String(storeName);
       await contract.addStore(nameToBytes32);
-      setTimeout(() => {
-        this.refreshData();
-      }, 5000);
     } catch (e) {
       console.log(e);
     }
@@ -59,9 +65,6 @@ class StoreOwnerPage extends Component {
       const { contract } = this.props;
       try {
         await contract.deleteStore(storeId);
-        setTimeout(() => {
-          this.refreshData();
-        }, 5000);
       } catch (e) {
         console.log(e);
       }
@@ -73,11 +76,8 @@ class StoreOwnerPage extends Component {
       const { contract } = this.props;
       try {
         await contract.withdrawFunds(storeId, {
-          gasLimit: 150000
+          gasLimit: 150000,
         });
-        setTimeout(() => {
-          this.refreshData();
-        }, 5000);
       } catch (e) {
         console.log(e);
       }
@@ -88,7 +88,7 @@ class StoreOwnerPage extends Component {
     const { stores } = this.state;
     if (!stores || stores.length === 0)
       return (
-        <div style={{ marginTop: "40px" }}>You don't have any stores yet.</div>
+        <div style={{ marginTop: '40px' }}>You don't have any stores yet.</div>
       );
     return (
       <div className="panelSection">
@@ -106,14 +106,14 @@ class StoreOwnerPage extends Component {
               return (
                 <tr key={i}>
                   <td>
-                    <Link to={`/store/${store.id}`}>{store.name}</Link>
+                    <Link to={`/store/${store.storeId}`}>{store.name}</Link>
                   </td>
                   <td>{store.balance}</td>
                   <td>
-                    <button onClick={this.deleteStore(store.id)}>Remove</button>
+                    <button onClick={this.deleteStore(store.storeId)}>Remove</button>
                   </td>
                   <td>
-                    <button onClick={this.withdrawBalance(store.id)}>
+                    <button onClick={this.withdrawBalance(store.storeId)}>
                       Withdraw balance
                     </button>
                   </td>
