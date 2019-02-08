@@ -14,10 +14,17 @@ class AdminPage extends Component {
     this.addAdmin = this.addAdmin.bind(this);
     this.addStoreOwner = this.addStoreOwner.bind(this);
     this.onAddressChange = this.onAddressChange.bind(this);
+    this.refreshData = this.refreshData.bind(this);
   }
-
-  async refreshData() {
+  async listenToContractEvents() {
     const { contract } = this.props;
+    contract.on("LogAdminAdded", this.refreshData);
+    contract.on("LogAdminDeleted", this.refreshData);
+    contract.on("LogStoreOwnerAdded", this.refreshData);
+    contract.on("LogStoreOwnerDeleted", this.refreshData);
+  }
+  async refreshData() {
+    const { contract, onOwnershipChange } = this.props;
     const [administrators, storeOwners] = await Promise.all([
       contract.getAdministrators(),
       contract.getStoreOwners()
@@ -27,6 +34,7 @@ class AdminPage extends Component {
 
   componentDidMount() {
     this.refreshData();
+    this.listenToContractEvents();
   }
 
   deleteAdmin(address) {

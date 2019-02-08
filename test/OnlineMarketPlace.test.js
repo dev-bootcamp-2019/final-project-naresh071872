@@ -94,7 +94,7 @@ contract("OnlineMarketPlace", function(accounts) {
       storeId = tx.logs[0].args._id;
       eventEmitted = true;
     }
-    
+
     assert.equal(nameValue, name, "Passed Store should be added");
     assert.equal(
       eventEmitted,
@@ -109,10 +109,10 @@ contract("OnlineMarketPlace", function(accounts) {
     var eventEmitted = false;
     const name = ethers.utils.formatBytes32String("SHAMPOO");
 
-    var unitPrice = 12;
+    var unitPrice = 1;
     var quantity = 200;
     var nameValue;
-    
+
     const tx = await onlineMarketPlace.addProduct(
       storeId,
       name,
@@ -143,7 +143,6 @@ contract("OnlineMarketPlace", function(accounts) {
 
     var eventEmitted = false;
 
-
     var quantity = 1;
     var mystoreId;
     const tx = await onlineMarketPlace.purchaseProduct(
@@ -170,21 +169,18 @@ contract("OnlineMarketPlace", function(accounts) {
     const onlineMarketPlace = await OnlineMarketPlace.deployed();
 
     var eventEmitted = false;
-   
-   
+
     var updatedPrice = 22;
     var unitPrice;
-    const tx = await onlineMarketPlace.updatePrice(
-      productId,
-      updatedPrice,
-      { from: accounts[2] }
-    );
+    const tx = await onlineMarketPlace.updatePrice(productId, updatedPrice, {
+      from: accounts[2]
+    });
 
     if (tx.logs[0].event) {
       unitPrice = tx.logs[0].args._unitPrice.toString(20);
       eventEmitted = true;
     }
-    const result = await onlineMarketPlace.getProductPrice( productId);
+    const result = await onlineMarketPlace.getProductPrice(productId);
 
     assert.equal(result, updatedPrice, "Passed Unit Price should be updated");
     assert.equal(

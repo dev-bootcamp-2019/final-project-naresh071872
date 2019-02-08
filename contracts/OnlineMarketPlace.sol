@@ -407,14 +407,13 @@ contract OnlineMarketPlace is AccessRestriction {
     * @param quantity product quantity
     */
     function purchaseProduct(bytes32 _id,bytes32 _productId,uint _quantity) public
-    checkStock(_productId,_quantity) buyerEnoughFunds(_productId,_quantity) stopInEmergency()
+    //buyerEnoughFunds(_productId,_quantity) 
+    checkStock(_productId,_quantity)  stopInEmergency()
      payable returns (bool)
     {
         
         uint totalPrice = products[_productId].unitPrice * _quantity;
-        require(msg.value >= totalPrice, "msg.value must be greater or equal than total price");
         
-
    
         if (msg.value > totalPrice) {
             msg.sender.transfer(SafeMath.sub(msg.value,totalPrice));

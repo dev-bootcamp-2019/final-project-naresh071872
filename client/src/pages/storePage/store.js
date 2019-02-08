@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { ethers } from 'ethers';
-import Navigation from '../../components/navigation';
-import './store.css';
+import React, { Component } from "react";
+import { ethers } from "ethers";
+import Navigation from "../../components/navigation";
+import "./store.css";
 
 const GAZ_LIMIT = 200000;
 const GAZ_PRICE = 60000000000;
@@ -12,14 +12,14 @@ class StorePage extends Component {
     this.state = {
       store: null,
       inventory: null,
-      itemName: '',
-      itemPrice: '',
-      itemQuantity: '',
+      itemName: "",
+      itemPrice: "",
+      itemQuantity: "",
       addItemError: false,
       rowEdit: false,
-      priceEdit: '',
-      quantityEdit: '',
-      buyQuantity: 1,
+      priceEdit: "",
+      quantityEdit: "",
+      buyQuantity: 1
     };
     this.addItem = this.addItem.bind(this);
     this.refreshData = this.refreshData.bind(this);
@@ -36,11 +36,11 @@ class StorePage extends Component {
 
   async listenToContractEvents() {
     const { contract } = this.props;
-    contract.on('LogProductAdded', this.refreshData);
-    contract.on('LogProductRemoved', this.refreshData);
-    contract.on('LogUpdatePrice', this.refreshData);
-    contract.on('LogProductQtyUpdated', this.refreshData);
-    contract.on('LogProductBought', this.refreshData);
+    contract.on("LogProductAdded", this.refreshData);
+    contract.on("LogProductRemoved", this.refreshData);
+    contract.on("LogUpdatePrice", this.refreshData);
+    contract.on("LogProductQtyUpdated", this.refreshData);
+    contract.on("LogProductBought", this.refreshData);
   }
   async refreshData() {
     const { match, contract } = this.props;
@@ -49,17 +49,16 @@ class StorePage extends Component {
       try {
         const [store, [ids, names, quantities, prices]] = await Promise.all([
           contract.stores(storeId),
-          contract.productCatalog(storeId),
+          contract.productCatalog(storeId)
         ]);
 
         let mappedInventory = [];
         ids.forEach((id, i) => {
-          
           mappedInventory.push({
             id,
             name: ethers.utils.parseBytes32String(names[i]),
             quantity: Number(ethers.utils.formatEther(quantities[i])),
-            price: ethers.utils.formatEther(prices[i]),
+            price: ethers.utils.formatEther(prices[i])
           });
         });
         this.setState({
@@ -67,16 +66,15 @@ class StorePage extends Component {
             id: store.id,
             name: ethers.utils.parseBytes32String(store.name),
             owner: store.owner,
-            storeSales: store.storeSales.toString(),
+            storeSales: store.storeSales.toString()
           },
-          inventory: mappedInventory,
+          inventory: mappedInventory
         });
       } catch (e) {
         console.log(e);
       }
     }
   }
-  
 
   componentDidMount() {
     this.refreshData();
@@ -98,7 +96,7 @@ class StorePage extends Component {
   async addItem() {
     const { contract } = this.props;
     const { itemName, itemPrice, itemQuantity, store } = this.state;
-    if (itemName === '' || itemPrice === '' || itemQuantity === '') {
+    if (itemName === "" || itemPrice === "" || itemQuantity === "") {
       this.setState({ addItemError: true });
     }
     try {
@@ -136,7 +134,7 @@ class StorePage extends Component {
     return async () => {
       const { quantityEdit, store } = this.state;
       const { contract } = this.props;
-      if (!quantityEdit || quantityEdit === '') return;
+      if (!quantityEdit || quantityEdit === "") return;
       try {
         await contract.updateItemQuantity(
           itemId,
@@ -157,7 +155,7 @@ class StorePage extends Component {
     return async () => {
       const { priceEdit, store } = this.state;
       const { contract } = this.props;
-      if (!priceEdit || priceEdit === '') return;
+      if (!priceEdit || priceEdit === "") return;
       try {
         await contract.updateItemPrice(
           itemId,
@@ -200,7 +198,7 @@ class StorePage extends Component {
         await contract.purchaseProduct(store.id, item.id, quantity, {
           value: priceEther,
           gasLimit: GAZ_LIMIT,
-          gasPrice: GAZ_PRICE,
+          gasPrice: GAZ_PRICE
         });
         this.setState({ buyQuantity: 1 });
         setTimeout(this.refreshData, 5000);
@@ -243,7 +241,6 @@ class StorePage extends Component {
     } else {
       return (
         <tr onClick={this.setEditRow(i)} key={i}>
-       
           <td>{item.name}</td>
           <td>{item.quantity}</td>
           <td>{item.price}</td>
@@ -253,7 +250,7 @@ class StorePage extends Component {
             ) : (
               <div>
                 <input
-                  style={{ marginRight: '10px' }}
+                  style={{ marginRight: "10px" }}
                   type="number"
                   placeholder="Please enter a quantity"
                   onChange={this.onQuantityChange}
@@ -271,7 +268,7 @@ class StorePage extends Component {
   renderItems() {
     const { inventory } = this.state;
     if (!inventory || inventory.length === 0) {
-      return <div style={{ margin: '20px 0' }}>No item for sale yet.</div>;
+      return <div style={{ margin: "20px 0" }}>No item for sale yet.</div>;
     }
     return (
       <div className="panelSection">
@@ -279,7 +276,6 @@ class StorePage extends Component {
         <table className="inventoryTable" cellSpacing="0">
           <thead>
             <tr>
-           
               <th>Name</th>
               <th>Quantity</th>
               <th>Price (ETH)</th>
@@ -304,7 +300,7 @@ class StorePage extends Component {
             <label>Name</label>
             <input
               type="text"
-              onChange={this.onItemInputChange('itemName')}
+              onChange={this.onItemInputChange("itemName")}
               placeholder="Please enter a product name"
             />
           </div>
@@ -312,7 +308,7 @@ class StorePage extends Component {
             <label>Price</label>
             <input
               type="text"
-              onChange={this.onItemInputChange('itemPrice')}
+              onChange={this.onItemInputChange("itemPrice")}
               placeholder="Please enter a product price"
             />
           </div>
@@ -320,7 +316,7 @@ class StorePage extends Component {
             <label>Quantity</label>
             <input
               type="number"
-              onChange={this.onItemInputChange('itemQuantity')}
+              onChange={this.onItemInputChange("itemQuantity")}
               placeholder="Please enter a product quantity"
             />
           </div>

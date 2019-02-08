@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { ethers } from 'ethers';
-import { Link } from 'react-router-dom';
-import Navigation from '../../components/navigation';
-import './storeOwner.css';
+import React, { Component } from "react";
+import { ethers } from "ethers";
+import { Link } from "react-router-dom";
+import Navigation from "../../components/navigation";
+import "./storeOwner.css";
 
 class StoreOwnerPage extends Component {
   constructor() {
     super();
     this.state = {
       stores: null,
-      storeName: '',
+      storeName: ""
     };
     this.onStoreNameChange = this.onStoreNameChange.bind(this);
     this.createStore = this.createStore.bind(this);
@@ -20,9 +20,9 @@ class StoreOwnerPage extends Component {
 
   async listenToContractEvents() {
     const { contract } = this.props;
-    contract.on('LogStoreOwnerAdded', this.refreshData);
-    contract.on('LogStoreOwnerDeleted', this.refreshData);
-    contract.on('LogWithdrawFunds', this.refreshData);
+    contract.on("LogAddStore", this.refreshData);
+    contract.on("LogDeleteStore", this.refreshData);
+    contract.on("LogWithdrawFunds", this.refreshData);
   }
 
   async refreshData() {
@@ -47,7 +47,7 @@ class StoreOwnerPage extends Component {
   async createStore() {
     const { storeName } = this.state;
     const { contract } = this.props;
-    if (!storeName || storeName === '') return;
+    if (!storeName || storeName === "") return;
     try {
       const nameToBytes32 = ethers.utils.formatBytes32String(storeName);
       await contract.addStore(nameToBytes32);
@@ -76,7 +76,7 @@ class StoreOwnerPage extends Component {
       const { contract } = this.props;
       try {
         await contract.withdrawFunds(storeId, {
-          gasLimit: 150000,
+          gasLimit: 150000
         });
       } catch (e) {
         console.log(e);
@@ -88,7 +88,7 @@ class StoreOwnerPage extends Component {
     const { stores } = this.state;
     if (!stores || stores.length === 0)
       return (
-        <div style={{ marginTop: '40px' }}>You don't have any stores yet.</div>
+        <div style={{ marginTop: "40px" }}>You don't have any stores yet.</div>
       );
     return (
       <div className="panelSection">
@@ -110,7 +110,9 @@ class StoreOwnerPage extends Component {
                   </td>
                   <td>{store.balance}</td>
                   <td>
-                    <button onClick={this.deleteStore(store.storeId)}>Remove</button>
+                    <button onClick={this.deleteStore(store.storeId)}>
+                      Remove
+                    </button>
                   </td>
                   <td>
                     <button onClick={this.withdrawBalance(store.storeId)}>
