@@ -91,7 +91,7 @@ contract("OnlineMarketPlace", function(accounts) {
 
     if (tx.logs[0].event) {
       nameValue = tx.logs[0].args._name;
-      storeId = tx.logs[0].args._storeId;
+      storeId = tx.logs[0].args._id;
       eventEmitted = true;
     }
     
@@ -123,7 +123,7 @@ contract("OnlineMarketPlace", function(accounts) {
 
     if (tx.logs[0].event) {
       nameValue = tx.logs[0].args._name;
-      productId = tx.logs[0].args._productId;
+      productId = tx.logs[0].args._id;
       eventEmitted = true;
     }
 
@@ -155,11 +155,11 @@ contract("OnlineMarketPlace", function(accounts) {
     );
 
     if (tx.logs[0].event) {
-      mystoreId = tx.logs[0].args._storeId.toString(20);
+      mystoreId = tx.logs[0].args._id;
       eventEmitted = true;
     }
 
-    assert.equal(mystoreId, storeId, "Product should be bought by shopper");
+    assert.equal(mystoreId, productId, "Product should be bought by shopper");
     assert.equal(
       eventEmitted,
       true,
@@ -229,7 +229,7 @@ contract("OnlineMarketPlace", function(accounts) {
     });
 
     if (tx.logs[0].event) {
-      productId = tx.logs[0].args._productId.toString(20);
+      productId = tx.logs[0].args._id.toString(20);
       eventEmitted = true;
     }
 
@@ -252,7 +252,7 @@ contract("OnlineMarketPlace", function(accounts) {
     });
 
     if (tx.logs[0].event) {
-      mystoreId = tx.logs[0].args._storeId.toString();
+      mystoreId = tx.logs[0].args._id.toString();
       eventEmitted = true;
     }
 

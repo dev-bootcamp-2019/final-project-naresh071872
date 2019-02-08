@@ -30,7 +30,7 @@ class StorePage extends Component {
     this.onQuantityEditChange = this.onQuantityEditChange.bind(this);
     this.onPriceEditChange = this.onPriceEditChange.bind(this);
     this.removeItem = this.removeItem.bind(this);
-    this.purchaseItem = this.purchaseItem.bind(this);
+    this.purchaseProduct = this.purchaseProduct.bind(this);
     this.onQuantityChange = this.onQuantityChange.bind(this);
   }
 
@@ -42,7 +42,6 @@ class StorePage extends Component {
     contract.on('LogProductQtyUpdated', this.refreshData);
     contract.on('LogProductBought', this.refreshData);
   }
-
   async refreshData() {
     const { match, contract } = this.props;
     if (match.params && match.params.storeId) {
@@ -55,6 +54,7 @@ class StorePage extends Component {
 
         let mappedInventory = [];
         ids.forEach((id, i) => {
+          
           mappedInventory.push({
             id,
             name: ethers.utils.parseBytes32String(names[i]),
@@ -64,7 +64,7 @@ class StorePage extends Component {
         });
         this.setState({
           store: {
-            storeId: store.storeId,
+            id: store.id,
             name: ethers.utils.parseBytes32String(store.name),
             owner: store.owner,
             storeSales: store.storeSales.toString(),
@@ -76,6 +76,7 @@ class StorePage extends Component {
       }
     }
   }
+  
 
   componentDidMount() {
     this.refreshData();
@@ -103,7 +104,7 @@ class StorePage extends Component {
     try {
       const itemNameBytes32 = ethers.utils.formatBytes32String(itemName);
       await contract.addProduct(
-        store.storeId,
+        store.id,
         itemNameBytes32,
         ethers.utils.parseEther(itemPrice),
         ethers.utils.parseEther(itemQuantity)
@@ -139,7 +140,7 @@ class StorePage extends Component {
       try {
         await contract.updateItemQuantity(
           itemId,
-          store.storeId,
+          store.id,
           ethers.utils.parseEther(quantityEdit)
         );
         setTimeout(() => {
@@ -160,7 +161,7 @@ class StorePage extends Component {
       try {
         await contract.updateItemPrice(
           itemId,
-          store.storeId,
+          store.id,
           ethers.utils.parseEther(priceEdit)
         );
         setTimeout(() => {
@@ -179,7 +180,7 @@ class StorePage extends Component {
       const { contract } = this.props;
       const { store } = this.state;
       try {
-        await contract.removeItemFromInventory(itemId, store.storeId);
+        await contract.removeItemFromInventory(itemId, store.id);
         setTimeout(this.refreshData, 5000);
       } catch (e) {
         console.log(e);
@@ -187,7 +188,7 @@ class StorePage extends Component {
     };
   }
 
-  purchaseItem(item) {
+  purchaseProduct(item) {
     return async e => {
       e.stopPropagation();
       const { contract } = this.props;
@@ -196,7 +197,7 @@ class StorePage extends Component {
         const price = buyQuantity * Number(item.price);
         const priceEther = ethers.utils.parseEther(price.toString());
         const quantity = ethers.utils.parseEther(buyQuantity.toString());
-        await contract.purchaseItem(store.storeId, item.productId, quantity, {
+        await contract.purchaseProduct(store.id, item.id, quantity, {
           value: priceEther,
           gasLimit: GAZ_LIMIT,
           gasPrice: GAZ_PRICE,
@@ -226,7 +227,7 @@ class StorePage extends Component {
               placeholder={item.quantity}
               onChange={this.onQuantityEditChange}
             />
-            <button onClick={this.editItemQuantity(item.productId)}>Edit</button>
+            <button onClick={this.editItemQuantity(item.id)}>Edit</button>
           </td>
           <td>
             <input
@@ -234,7 +235,7 @@ class StorePage extends Component {
               placeholder={item.price}
               onChange={this.onPriceEditChange}
             />
-            <button onClick={this.editItemPrice(item.productId)}>Edit</button>
+            <button onClick={this.editItemPrice(item.id)}>Edit</button>
           </td>
           <td />
         </tr>
@@ -242,12 +243,13 @@ class StorePage extends Component {
     } else {
       return (
         <tr onClick={this.setEditRow(i)} key={i}>
+       
           <td>{item.name}</td>
           <td>{item.quantity}</td>
           <td>{item.price}</td>
           <td>
             {isStoreOwner ? (
-              <button onClick={this.removeItem(item.productId)}>Remove</button>
+              <button onClick={this.removeItem(item.id)}>Remove</button>
             ) : (
               <div>
                 <input
@@ -257,7 +259,7 @@ class StorePage extends Component {
                   onChange={this.onQuantityChange}
                   value={buyQuantity}
                 />
-                <button onClick={this.purchaseItem(item)}>Buy</button>
+                <button onClick={this.purchaseProduct(item)}>Buy</button>
               </div>
             )}
           </td>
@@ -277,6 +279,7 @@ class StorePage extends Component {
         <table className="inventoryTable" cellSpacing="0">
           <thead>
             <tr>
+           
               <th>Name</th>
               <th>Quantity</th>
               <th>Price (ETH)</th>

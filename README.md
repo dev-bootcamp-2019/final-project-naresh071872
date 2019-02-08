@@ -23,9 +23,8 @@ Start the React app.
     npm run start
 
 Alternatively you can use test network deployed contracts addresses:
-
-     Ropsten: 0xeB388843067dbDD6633935ab7B743Cd8E9e4621A
-    Rinkeby: 0xCaAdee09FeA0bBECB559475D067A23556C774CAA
+    Ropsten: 0x3D78B1601a0c5Fb024FbC412067030376dC8637E
+    Rinkeby: 0xD595eeF2ef26DA862d959043660DCe9179f8F865 
 
 Project Description: Online Market Place Application was built as dapp with front-end on React JS.
 It includes following functionality as belows

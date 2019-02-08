@@ -19,28 +19,28 @@ contract OnlineMarketPlace is AccessRestriction {
 
     //data for store
       struct Store  {
-        bytes32 storeId;
+        bytes32 id;
         bytes32 name;
         address owner;
         uint storeSales;
     }
     //data for product
      struct Product{
-        bytes32 productId;
+        bytes32 id;
         bytes32 name;
         uint unitPrice;
         uint totalQuantity;
         uint productSales;
     }
     
-    bytes32[] storeIds;
-    //data for storeId key and list of productIds array as values
+    bytes32[] ids;
+    //data for id key and list of ids array as values
     mapping(bytes32 => bytes32[]) public productsByStore;
-    // data for storeId key and stores
+    // data for id key and stores
     mapping(bytes32 => Store) public stores;
-    //data for productId key and products
+    //data for id key and products
     mapping(bytes32 => Product) products;
-    //data for list of storeIds by owner
+    //data for list of ids by owner
     mapping (address => bytes32[]) public storesByOwner;
 
     //data to maintain counts
@@ -54,18 +54,18 @@ contract OnlineMarketPlace is AccessRestriction {
       event LogStoreOwnerAdded(address _owner);
      event LogStoreOwnerDeleted(address _owner);
      
-     event LogAddStore(bytes32 _storeId,bytes32 _name);
-     event LogDeleteStore(bytes32 _storeId);
+     event LogAddStore(bytes32 _id,bytes32 _name);
+     event LogDeleteStore(bytes32 _id);
    
-     event LogProductAdded(bytes32 _storeId,bytes32 _productId,bytes32 _name,uint _unitPrice,uint _totalQuantity);
-     event LogProductRemoved(bytes32 _storeId,bytes32 _productId);
-     event LogUpdatePrice(bytes32 _productId,uint _unitPrice,uint _oldUnitPrice);
+     event LogProductAdded(bytes32 _id,bytes32 _name,uint _unitPrice,uint _totalQuantity);
+     event LogProductRemoved(bytes32 _id);
+     event LogUpdatePrice(bytes32 _id,uint _unitPrice,uint _oldUnitPrice);
      
-     event LogWithdrawFunds(bytes32 _storeId,uint _funds);
+     event LogWithdrawFunds(bytes32 _id,uint _funds);
      
-     event LogProductBought(bytes32 _storeId,bytes32 _productId,uint _quantity);
-     event LogInventoryAdjustment(bytes32 _storeId,bytes32 _productId,uint _quantity);
-     event LogProductQtyUpdated(bytes32 _productId,uint _newQuantity,uint oldQty);
+     event LogProductBought(bytes32 _id,bytes32 _productId,uint _quantity);
+     event LogInventoryAdjustment(bytes32 _id,uint _quantity);
+     event LogProductQtyUpdated(bytes32 _id,uint _newQuantity,uint oldQty);
 
     //contract instantiation - send contract owner as admin
      constructor() public{
@@ -189,38 +189,38 @@ contract OnlineMarketPlace is AccessRestriction {
     
     /* @dev create a new storefront that will be displayed on the marketplace
      * @param name store name 
-     * @returns storeId id of store
+     * @returns id id of store
     */
     
     function addStore(bytes32 _name) public restrictStoreOwner() returns (bytes32)
     {
-        bytes32 _storeId = keccak256(abi.encodePacked(msg.sender, _name, now));
-        Store memory _store =Store(_storeId,_name,msg.sender,0);
-        storeIds.push(_storeId);
-        storesByOwner[msg.sender].push(_storeId);
-        stores[_storeId] = _store;
-        emit LogAddStore(_storeId,_name);
-        return _storeId;  
+        bytes32 _id = keccak256(abi.encodePacked(msg.sender, _name, now));
+        Store memory _store =Store(_id,_name,msg.sender,0);
+        ids.push(_id);
+        storesByOwner[msg.sender].push(_id);
+        stores[_id] = _store;
+        emit LogAddStore(_id,_name);
+        return _id;  
     }
     /* @dev delete a store that will be removed from the marketplace
-    * @param _storeId identifier of a store
+    * @param _id identifier of a store
     */
-     function deleteStore(bytes32 _storeId) public restrictStoreOwner() returns (bytes32)
+     function deleteStore(bytes32 _id) public restrictStoreOwner() returns (bytes32)
     {
         
          // Delete all the items from the store inventory.
-        for (uint i = 0; i < productsByStore[_storeId].length; i++) {
-            bytes32 productId = productsByStore[_storeId][i];
-            delete products[productId];
+        for (uint i = 0; i < productsByStore[_id].length; i++) {
+            bytes32 id = productsByStore[_id][i];
+            delete products[id];
         }
 
         // Delete the store inventory.
-        delete productsByStore[_storeId];
+        delete productsByStore[_id];
 
         // Remove from storefrontsByOwner mapping.
         uint storeCount = storesByOwner[msg.sender].length;
         for(uint i = 0; i < storeCount; i++) {
-            if (storesByOwner[msg.sender][i] == _storeId) {
+            if (storesByOwner[msg.sender][i] == _id) {
                 storesByOwner[msg.sender][i] = storesByOwner[msg.sender][storeCount-1];
                 delete storesByOwner[msg.sender][storeCount-1];
                 storesByOwner[msg.sender].length --;
@@ -228,28 +228,28 @@ contract OnlineMarketPlace is AccessRestriction {
             }
         }
 
-        // Remove from storeIds array.
-        storeCount = storeIds.length;
+        // Remove from ids array.
+        storeCount = ids.length;
         for(uint i = 0; i < storeCount; i++) {
-            if (storeIds[i] == _storeId) {
-                storeIds[i] = storeIds[storeCount - 1];
-                delete storeIds[storeCount - 1];
-                storeIds.length --;
+            if (ids[i] == _id) {
+                ids[i] = ids[storeCount - 1];
+                delete ids[storeCount - 1];
+                ids.length --;
                 break;
             }
         }
 
         // Withdraw Balance if needed.
-        uint storeBalance = stores[_storeId].storeSales;
+        uint storeBalance = stores[_id].storeSales;
         if (storeBalance > 0) {
-            //stores[_storeId].storeBalance = 0;
+            //stores[_id].storeBalance = 0;
             msg.sender.transfer(storeBalance);
-            emit LogWithdrawFunds(_storeId, storeBalance);
+            emit LogWithdrawFunds(_id, storeBalance);
         }
         
-        delete stores[_storeId]; 
-        emit LogDeleteStore(_storeId);
-        return _storeId;
+        delete stores[_id]; 
+        emit LogDeleteStore(_id);
+        return _id;
        
     }
  
@@ -258,28 +258,28 @@ contract OnlineMarketPlace is AccessRestriction {
     view
     returns(bytes32[]  memory ,bytes32[] memory, uint[] memory) {
         uint storeCount = storesByOwner[storeOwner].length;
-        bytes32[] memory _storeIds = new bytes32[](storeCount);
+        bytes32[] memory _ids = new bytes32[](storeCount);
         bytes32[] memory names = new bytes32[](storeCount);
         uint[] memory storeSales = new uint[](storeCount);
        
         for(uint i = 0; i < storeCount; i++) {
-            bytes32 storeId = storesByOwner[storeOwner][i];
-            _storeIds[i] = stores[storeId].storeId;
-            names[i] = stores[storeId].name;
-            storeSales[i] = stores[storeId].storeSales;
+            bytes32 id = storesByOwner[storeOwner][i];
+            _ids[i] = stores[id].id;
+            names[i] = stores[id].name;
+            storeSales[i] = stores[id].storeSales;
         }
-        return (_storeIds, names, storeSales);
+        return (_ids, names, storeSales);
     }
 
     /* @dev withdraw any funds that the store has collected from sales
-    * @param _storeId identifier of a store
+    * @param _id identifier of a store
       * @param _funds  funds need to be withdraw from store balance
     */
-    function withdrawFunds(bytes32 _storeId,uint _funds) public payable onlyInEmergency() //checkAvailFunds(_storeId,_funds)
+    function withdrawFunds(bytes32 _id,uint _funds) public payable onlyInEmergency() //checkAvailFunds(_id,_funds)
     {
-        stores[_storeId].storeSales = 0;
+        stores[_id].storeSales = 0;
         msg.sender.transfer(_funds);
-        emit LogWithdrawFunds(_storeId,_funds);
+        emit LogWithdrawFunds(_id,_funds);
     
     }
 
@@ -290,37 +290,37 @@ contract OnlineMarketPlace is AccessRestriction {
     public
     view
     returns(bytes32[] memory, bytes32[] memory, address[] memory) {
-        uint storeCount = storeIds.length;
-        bytes32[] memory _storeIds = new bytes32[](storeCount);
+        uint storeCount = ids.length;
+        bytes32[] memory _ids = new bytes32[](storeCount);
         bytes32[] memory names = new bytes32[](storeCount);
         address[] memory owners = new address[](storeCount);
         for(uint i = 0; i < storeCount; i ++) {
-            _storeIds[i] = stores[storeIds[i]].storeId;
-            names[i] = stores[storeIds[i]].name;
-            owners[i] = stores[storeIds[i]].owner;
+            _ids[i] = stores[ids[i]].id;
+            names[i] = stores[ids[i]].name;
+            owners[i] = stores[ids[i]].owner;
         }
-        return(_storeIds, names, owners);
+        return(_ids, names, owners);
     }
     /* @dev add a product to a specific store 
-    * @param _storeId identifier of a store
+    * @param _id identifier of a store
       * @param _name name of product
        * @param _unitPrice price of product
         * @param _totalQuantity total inventory of product available
          
     */
-    function addProduct(bytes32 _storeId,bytes32 _name,uint _unitPrice,uint _totalQuantity) public restrictStoreOwner() returns (bytes32)
+    function addProduct(bytes32 _id,bytes32 _name,uint _unitPrice,uint _totalQuantity) public restrictStoreOwner() returns (bytes32)
     {
         
         bytes32 _productId = keccak256(abi.encodePacked(msg.sender, _name, now));
         Product memory product = Product(_productId,_name,_unitPrice,_totalQuantity,0);
         products[_productId] = product;
-        productsByStore[_storeId].push(_productId);
-        emit LogProductAdded(_storeId,_productId,_name,_unitPrice,_totalQuantity);
-        return  _productId;
+        productsByStore[_id].push(_productId);
+        emit LogProductAdded(_productId,_name,_unitPrice,_totalQuantity);
+        return  _id;
     }
       /* @dev remove a product from  a specific store 
-    * @param _storeId identifier of a store
-      * @param _productId identifier of a product
+    * @param _id identifier of a store
+      * @param _id identifier of a product
     
     */
     function removeProduct(bytes32 _storeId,bytes32 _productId) public restrictStoreOwner() 
@@ -337,136 +337,141 @@ contract OnlineMarketPlace is AccessRestriction {
         }
         //Remove item from items mapping
         delete products[_productId];
-        emit LogProductRemoved(_storeId,_productId);
+        emit LogProductRemoved(_productId);
     }
     
        /* @dev change any of the products’ prices.
-    * @param _storeId identifier of a store
-      * @param _productId identifier of a product
+    * @param _id identifier of a store
+      * @param _id identifier of a product
     * @param _newUnitPrice new unit price of a product
     */
-    function updatePrice(bytes32 _productId,uint _newUnitPrice) public restrictStoreOwner() 
+    function updatePrice(bytes32 _id,uint _newUnitPrice) public restrictStoreOwner() 
     returns (bytes32)
     {
-        uint oldPrice = products[_productId].unitPrice;
-        products[_productId].unitPrice = _newUnitPrice;
-        emit LogUpdatePrice(_productId,_newUnitPrice,oldPrice);
-        return _productId;
+        uint oldPrice = products[_id].unitPrice;
+        products[_id].unitPrice = _newUnitPrice;
+        emit LogUpdatePrice(_id,_newUnitPrice,oldPrice);
+        return _id;
     }
   
  /** @dev Updates the quantity of an Item from a specicic Storefront.
-    * @param _productId The item ID we want to update.
+    * @param _id The item ID we want to update.
     * @param _newQuantity The new quantity value we want to set the Item to.
-    * @return _productId The updated item ID.
+    * @return _id The updated item ID.
     */
-    function updateItemQuantity(bytes32 _productId, uint _newQuantity)
+    function updateItemQuantity(bytes32 _id, uint _newQuantity)
     public
     restrictStoreOwner()
     returns(bytes32) {
-        uint oldQty = products[_productId].totalQuantity;
-        products[_productId].totalQuantity = _newQuantity;
-        emit LogProductQtyUpdated(_productId, _newQuantity, oldQty);
-        return _productId;
+        uint oldQty = products[_id].totalQuantity;
+        products[_id].totalQuantity = _newQuantity;
+        emit LogProductQtyUpdated(_id, _newQuantity, oldQty);
+        return _id;
     }   
     /* @dev check availability funds
-    * @param _storeId identifier of a store
+    * @param _id identifier of a store
       * @param _funds  funds need to be withdraw from store balance
     */
-    modifier checkAvailFunds(bytes32 _storeId,uint _funds) {
-        require(stores[_storeId].storeSales>=_funds,"Funds plan to withdraw is more than Store Balance");
+    modifier checkAvailFunds(bytes32 _id,uint _funds) {
+        require(stores[_id].storeSales>=_funds,"Funds plan to withdraw is more than Store Balance");
         _;
     }
 
 
        /* @dev check whether buyer has enough funds 
-    * @param _storeId identifier of a store
-      * @param _productId identifier of a product
+    * @param _id identifier of a store
+      * @param _id identifier of a product
     * @param quantity product quantity
     */
-    modifier buyerEnoughFunds(bytes32 storeId,bytes32 productId,uint quantity) 
+    modifier buyerEnoughFunds(bytes32 _productId,uint quantity) 
     { 
         
-        uint totalCost = products[productId].unitPrice * (quantity);
-        require(msg.sender.balance >= totalCost,"Buyer doesn't have enought balance"); 
+        uint totalCost = products[_productId].unitPrice * (quantity);
+        require(msg.value >= totalCost,"Buyer doesn't have enought balance"); 
         _;
     }
       /* @dev check product inventory .
-    * @param _storeId identifier of a store
-      * @param _productId identifier of a product
+    * @param _id identifier of a store
+      * @param _id identifier of a product
     * @param quantity product quantity
     */
-    modifier checkStock(bytes32 storeId,bytes32 productId,uint quantity)
+    modifier checkStock(bytes32 _productId,uint quantity)
     {
-        require (products[productId].totalQuantity>=quantity,"Out-of-Stock"); 
+        require (products[_productId].totalQuantity>=quantity,"Out-of-Stock"); 
         _;
     }
 
    /* @dev buy product .
-    * @param _storeId identifier of a store
-      * @param _productId identifier of a product
+    * @param _id identifier of a store
+      * @param _id identifier of a product
     * @param quantity product quantity
     */
-    function purchaseProduct(bytes32 _storeId,bytes32 _productId,uint _quantity) public
-    checkStock(_storeId,_productId,_quantity) buyerEnoughFunds(_storeId,_productId,_quantity) stopInEmergency()
+    function purchaseProduct(bytes32 _id,bytes32 _productId,uint _quantity) public
+    checkStock(_productId,_quantity) buyerEnoughFunds(_productId,_quantity) stopInEmergency()
      payable returns (bool)
     {
         
         uint totalPrice = products[_productId].unitPrice * _quantity;
+        require(msg.value >= totalPrice, "msg.value must be greater or equal than total price");
+        
+
+   
         if (msg.value > totalPrice) {
             msg.sender.transfer(SafeMath.sub(msg.value,totalPrice));
         }
-        adjustInventory(_storeId,_productId,_quantity);
+        adjustInventory(_productId,_quantity);
         products[_productId].productSales =SafeMath.add(products[_productId].productSales,totalPrice);
-        stores[_storeId].storeSales = SafeMath.add(stores[_storeId].storeSales,totalPrice);
-        emit LogProductBought(_storeId,_productId,_quantity);
+        stores[_id].storeSales = SafeMath.add(stores[_id].storeSales,totalPrice);
+        emit LogProductBought(_id,_productId,_quantity);
         return true;
     }
     /* @dev inventory will be reduced .
-    * @param _storeId identifier of a store
-      * @param _productId identifier of a product
+    * @param _id identifier of a store
+      * @param _id identifier of a product
     * @param quantity product quantity
     */
-    function adjustInventory(bytes32 _storeId,bytes32 _productId,uint _quantity) private
+    function adjustInventory(bytes32 _productId,uint _quantity) private
     {
         products[_productId].totalQuantity = SafeMath.sub(products[_productId].totalQuantity,_quantity);
-        emit LogInventoryAdjustment(_storeId,_productId,_quantity);
+        emit LogInventoryAdjustment(_productId,_quantity);
 
     }
-    /** @dev Get the inventory for a specific store.
-    * @param _storeId The storefront ID.
+    
+   /** @dev Get the inventory for a specific Storefront.
+    * @param _id The storefront ID.
     * @return (itemIds, itemNames, itemQuantities, itemPrices) The Id, name, quantity and price for each Item.
     */
-    function productCatalog(bytes32 _storeId)
+    function productCatalog(bytes32 _id)
     public
     view
     returns(bytes32[] memory, bytes32[] memory, uint[] memory, uint[] memory)
     {
-        bytes32[] memory productIdArray = productsByStore[_storeId];
-        uint productIdSize = productIdArray.length;
-        bytes32[] memory productIds = new bytes32[](productIdSize);
-        bytes32[] memory productNames = new bytes32[](productIdSize);
-        uint[] memory totalQuantity = new uint[](productIdSize);
-        uint[] memory unitPrice = new uint[](productIdSize);
-        for(uint i = 0; i < productIdSize; i++) {
-            productIds[i] = products[productIdArray[i]].productId;
-            productNames[i] = products[productIdArray[i]].name;
-            totalQuantity[i] = products[productIdArray[i]].totalQuantity;
-            unitPrice[i] = products[productIdArray[i]].unitPrice;
+        bytes32[] memory inventory = productsByStore[_id];
+        uint inventorySize = inventory.length;
+        bytes32[] memory itemIds = new bytes32[](inventorySize);
+        bytes32[] memory itemNames = new bytes32[](inventorySize);
+        uint[] memory itemQuantities = new uint[](inventorySize);
+        uint[] memory itemPrices = new uint[](inventorySize);
+        for(uint i = 0; i < inventorySize; i++) {
+            itemIds[i] = products[inventory[i]].id;
+            itemNames[i] = products[inventory[i]].name;
+            itemQuantities[i] = products[inventory[i]].totalQuantity;
+            itemPrices[i] = products[inventory[i]].unitPrice;
         }
-        return (productIds, productNames, totalQuantity, unitPrice);
-        
+        return (itemIds, itemNames, itemQuantities, itemPrices);
     }
+
     function getStoreCount() external view returns(uint)
     {
-        return storeIds.length;
+        return ids.length;
     }
-    function getProductCount(bytes32 _storeId) external view returns(uint)
+    function getProductCount(bytes32 _id) external view returns(uint)
     {
-        return productsByStore[_storeId].length;
+        return productsByStore[_id].length;
     }
-    function getProductPrice(bytes32 _productId)  public view returns (uint)
+    function getProductPrice(bytes32 _id)  public view returns (uint)
 {
-    return products[_productId].unitPrice;
+    return products[_id].unitPrice;
 } 
  
     
